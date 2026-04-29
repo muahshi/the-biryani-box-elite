@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | The Biryani Box Elite</title>
+    <link rel="stylesheet" href="public/style.css">
+    <style>
+        .login-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 90vh; text-align: center; }
+        .login-card { background: rgba(22, 27, 22, 0.9); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); width: 85%; }
+        input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px; border: 1px solid var(--gold); background: transparent; color: #fff; font-size: 16px; box-sizing: border-box; }
+        .btn-full { width: 100%; background: var(--gold); color: var(--primary); padding: 15px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <div class="login-container">
+            <img src="public/logo.png" width="120" style="margin-bottom: 20px;">
+            <div class="login-card">
+                <h2 style="color: var(--gold); margin-bottom: 5px;">The Elite Club</h2>
+                <p style="font-size: 13px; color: #ccc;">Exclusive swad aur rewards ki duniya mein aapka swagat hai.</p>
+                <input type="tel" placeholder="Enter Mobile Number (+91)" maxlength="10">
+                <button class="btn-full" onclick="location.href='dashboard.html'">GET OTP / LOGIN</button>
+            </div>
+            <p style="margin-top: 30px; font-size: 11px; color: #666;">By continuing, you agree to our Terms & Conditions</p>
+        </div>
+    </div>
+</body>
+</html>
+
