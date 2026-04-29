@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Biryani Box Elite | Dashboard</title>
+    <link rel="stylesheet" href="public/style.css">
+</head>
+<body>
+    <div class="mobile-frame">
+        <header>
+            <div class="greeting-box">
+                <h2 id="ai-greeting">Salam, Biryani Lover!</h2>
+                <p id="day-logic">Loading Chef's mood...</p>
+            </div>
+            <div class="elite-badge">ELITE</div>
+        </header>
+
+        <div class="wallet-card">
+            <div class="wallet-header">
+                <span>Biryani Wallet</span>
+                <img src="public/logo.png" width="30">
+            </div>
+            <div class="balance">₹120.00</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 70%;"></div>
+                <small>₹80 more to redeem ₹200</small>
+            </div>
+        </div>
+
+        <div class="mission-card">
+            <div class="mission-info">
+                <h4>Earn ₹10 Instantly! 🎁</h4>
+                <p>Share your review on Instagram Story</p>
+            </div>
+            <button class="share-btn" onclick="shareOnIG()">Share Story</button>
+        </div>
+
+        <div class="ai-agent-box">
+            <div class="agent-header">
+                <span class="bot-icon">🤖</span>
+                <b>Groq AI Agent</b>
+            </div>
+            <p id="ai-suggestion">Thinking of a perfect combo for you...</p>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="active">🏠 Home</a>
+            <a href="menu.html">📜 Menu</a>
+            <a href="#">🎁 Offers</a>
+            <a href="#">⚙️ Profile</a>
+        </nav>
+    </div>
+
+    <canvas id="storyCanvas" style="display:none;" width="1080" height="1920"></canvas>
+
+    <script src="public/script.js"></script>
+</body>
+</html>
+
