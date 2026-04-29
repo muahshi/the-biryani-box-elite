@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | The Biryani Box</title>
+    <link rel="stylesheet" href="public/style.css">
+    <style>
+        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin: 20px 0; scrollbar-width: none; }
+        .cat-chip { background: var(--dark-card); padding: 8px 20px; border-radius: 20px; border: 1px solid #333; white-space: nowrap; font-size: 13px; }
+        .cat-chip.active { background: var(--gold); color: var(--primary); border-color: var(--gold); font-weight: bold; }
+        .menu-item { background: var(--dark-card); border-radius: 15px; display: flex; margin-bottom: 15px; overflow: hidden; border: 0.5px solid #222; }
+        .item-img { width: 100px; height: 100px; background: #222; display: flex; align-items: center; justify-content: center; }
+        .item-details { padding: 12px; flex: 1; }
+        .price-tag { color: var(--gold); font-weight: bold; font-size: 18px; margin-top: 5px; }
+        .ai-tag { background: rgba(197, 160, 89, 0.2); color: var(--gold); font-size: 10px; padding: 2px 8px; border-radius: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <h2 style="color: var(--gold);">Shahi Menu</h2>
+        
+        <div class="category-scroll">
+            <div class="cat-chip active">Biryanis</div>
+            <div class="cat-chip">Royal Starters</div>
+            <div class="cat-chip">Royal Combos</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-img">🥘</div> <div class="item-details">
+                <span class="ai-tag">Chef's Choice</span>
+                <h4 style="margin:5px 0;">Chicken Dum Biryani</h4>
+                <p style="font-size: 11px; color: #aaa;">Slow cooked on dum, tender chicken.</p>
+                <div class="price-tag">₹169 <small style="font-size: 10px; color: #666;">(Half)</small></div>
+            </div>
+            <button style="background:none; border:none; color:var(--gold); font-size: 24px; padding-right:15px;">+</button>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-img">🍗</div>
+            <div class="item-details">
+                <h4 style="margin:5px 0;">Chicken Tikka 21 Spices</h4>
+                <p style="font-size: 11px; color: #aaa;">Secret blend of 21 spices, rich & bold.</p>
+                <div class="price-tag">₹199</div>
+            </div>
+            <button style="background:none; border:none; color:var(--gold); font-size: 24px; padding-right:15px;">+</button>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="dashboard.html">🏠 Home</a>
+            <a href="menu.html" class="active">📜 Menu</a>
+            <a href="#">🎁 Offers</a>
+            <a href="#">⚙️ Profile</a>
+        </nav>
+    </div>
+</body>
+</html>
+
