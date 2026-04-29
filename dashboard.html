@@ -3,45 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | The Biryani Box Elite</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Elite Dashboard | The Biryani Box</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #c5a059; --green: #0a2910; --dark: #051408; }
+        body { background-color: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; min-height: 100vh; padding: 20px; box-sizing: border-box; background: linear-gradient(180deg, #0a2910 0%, #051408 100%); padding-bottom: 100px; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .elite-badge { background: var(--gold); color: var(--green); padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); }
+        
+        .welcome-section h2 { color: var(--gold); margin: 20px 0 5px 0; font-size: 24px; }
+        .welcome-section p { margin: 0; opacity: 0.7; font-size: 13px; }
+
+        .wallet-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 25px; padding: 25px; margin-top: 25px; backdrop-filter: blur(10px); position: relative; overflow: hidden; }
+        .wallet-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(197,160,89,0.1) 0%, transparent 70%); }
+        .balance-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+        .balance-amount { font-size: 40px; font-weight: 700; color: var(--gold); margin: 10px 0; }
+        
+        .mission-box { background: #112b11; border-radius: 20px; padding: 15px; margin-top: 20px; display: flex; align-items: center; justify-content: space-between; border: 1px dashed var(--gold); }
+        .share-btn { background: var(--gold); color: var(--green); border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; }
+
+        .ai-box { background: rgba(197, 160, 89, 0.1); border-left: 4px solid var(--gold); padding: 15px; border-radius: 0 15px 15px 0; margin-top: 25px; }
+        .ai-box b { color: var(--gold); display: block; margin-bottom: 5px; }
+
+        .nav-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(10, 41, 16, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 15px; border-radius: 25px; border: 1px solid rgba(197, 160, 89, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .nav-bar a { color: white; text-decoration: none; font-size: 20px; opacity: 0.6; }
+        .nav-bar a.active { color: var(--gold); opacity: 1; }
+    </style>
 </head>
 <body>
-    <div class="mobile-frame">
-        <header style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
-            <div class="greeting-box">
-                <h2 id="ai-greeting" style="color: #c5a059; margin: 0;">Salam, Biryani Lover!</h2>
-                <p id="day-logic" style="font-size: 12px; opacity: 0.8;">Aaj Friday ka maza lein!</p>
-            </div>
-            <div class="elite-badge" style="background: #c5a059; color: #0a2910; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 12px;">ELITE</div>
+    <div class="app-container">
+        <header>
+            <span style="font-weight: bold; letter-spacing: 1px;">THE BIRYANI BOX</span>
+            <div class="elite-badge">ELITE CLUB</div>
         </header>
 
-        <div class="wallet-card" style="background: linear-gradient(135deg, #1e4d1e, #0a2910); border: 1px solid #c5a059; border-radius: 20px; padding: 20px; margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between;">
-                <span>Biryani Wallet</span>
-                <span>🏆</span>
-            </div>
-            <div class="balance" style="font-size: 32px; font-weight: bold; color: #c5a059; margin: 10px 0;">₹120.00</div>
-            <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px;">
-                <div style="width: 60%; background: #c5a059; height: 100%; border-radius: 10px;"></div>
-            </div>
-            <small style="display: block; margin-top: 10px; font-size: 11px;">₹80 more to redeem ₹200</small>
+        <div class="welcome-section">
+            <h2 id="greeting">Salam, Mubashir!</h2>
+            <p>Aapka swagat hai Bhopal ki sabse royal kitchen mein.</p>
         </div>
 
-        <div style="background: #161b16; border-radius: 15px; padding: 15px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #c5a059;">
+        <div class="wallet-card">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-amount">₹120.00</div>
+            <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 10px; margin-top: 15px;">
+                <div style="width: 60%; background: var(--gold); height: 100%; border-radius: 10px; box-shadow: 0 0 10px var(--gold);"></div>
+            </div>
+            <p style="font-size: 11px; margin-top: 10px; opacity: 0.6;">₹80 aur kamao <b>FREE BIRYANI</b> ke liye!</p>
+        </div>
+
+        <div class="mission-box">
             <div>
-                <h4 style="margin: 0; font-size: 14px;">Earn ₹10 Instantly! 🎁</h4>
-                <p style="margin: 0; font-size: 11px; opacity: 0.7;">Share review on Instagram Story</p>
+                <b style="font-size: 14px; display: block;">Instant ₹10 Kamaein! 🎁</b>
+                <span style="font-size: 11px; opacity: 0.7;">Story share karein Instagram par</span>
             </div>
-            <button onclick="alert('Story Generating...') " style="background: #c5a059; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">Share</button>
+            <button class="share-btn">SHARE</button>
         </div>
 
-        <nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #051a0a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #c5a059;">
-            <a href="dashboard.html" style="color: #c5a059; text-decoration: none;">🏠 Home</a>
-            <a href="menu.html" style="color: #fff; text-decoration: none;">📜 Menu</a>
-            <a href="#" style="color: #fff; text-decoration: none;">🎁 Offers</a>
-        </nav>
+        <div class="ai-box">
+            <b>🤖 Chef AI Agent:</b>
+            <span id="ai-text" style="font-size: 13px; line-height: 1.5;">Aaj Friday hai! Mubashir, hamari <b>21 Spices Dum Biryani</b> aapke pichle order se match karti hai. Try karein?</span>
+        </div>
+
+        <div class="nav-bar">
+            <a href="#" class="active">🏠</a>
+            <a href="menu.html">📜</a>
+            <a href="#">🎁</a>
+            <a href="#">👤</a>
+        </div>
     </div>
 </body>
 </html>
