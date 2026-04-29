@@ -1,0 +1,81 @@
+:root {
+    --primary: #0a2910; /* Dark Emerald */
+    --gold: #c5a059;
+    --dark-card: #161b16;
+    --white: #ffffff;
+}
+
+body {
+    background-color: #000;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    color: var(--white);
+}
+
+.mobile-frame {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--primary);
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    padding-bottom: 100px;
+}
+
+.wallet-card {
+    background: linear-gradient(135deg, #1e4d1e, #0a2910);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.balance {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--gold);
+    margin: 10px 0;
+}
+
+.mission-card {
+    background: var(--dark-card);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--gold);
+}
+
+.share-btn {
+    background: var(--gold);
+    color: var(--primary);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.ai-agent-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    max-width: 450px;
+    width: 100%;
+    background: #051a0a;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    border-top: 1px solid var(--gold);
+}
