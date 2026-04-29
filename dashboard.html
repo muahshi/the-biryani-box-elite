@@ -3,58 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Biryani Box Elite | Dashboard</title>
-    <link rel="stylesheet" href="public/style.css">
+    <title>Dashboard | The Biryani Box Elite</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="mobile-frame">
-        <header>
+        <header style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
             <div class="greeting-box">
-                <h2 id="ai-greeting">Salam, Biryani Lover!</h2>
-                <p id="day-logic">Loading Chef's mood...</p>
+                <h2 id="ai-greeting" style="color: #c5a059; margin: 0;">Salam, Biryani Lover!</h2>
+                <p id="day-logic" style="font-size: 12px; opacity: 0.8;">Aaj Friday ka maza lein!</p>
             </div>
-            <div class="elite-badge">ELITE</div>
+            <div class="elite-badge" style="background: #c5a059; color: #0a2910; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 12px;">ELITE</div>
         </header>
 
-        <div class="wallet-card">
-            <div class="wallet-header">
+        <div class="wallet-card" style="background: linear-gradient(135deg, #1e4d1e, #0a2910); border: 1px solid #c5a059; border-radius: 20px; padding: 20px; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between;">
                 <span>Biryani Wallet</span>
-                <img src="public/logo.png" width="30">
+                <span>🏆</span>
             </div>
-            <div class="balance">₹120.00</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 70%;"></div>
-                <small>₹80 more to redeem ₹200</small>
+            <div class="balance" style="font-size: 32px; font-weight: bold; color: #c5a059; margin: 10px 0;">₹120.00</div>
+            <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px;">
+                <div style="width: 60%; background: #c5a059; height: 100%; border-radius: 10px;"></div>
             </div>
+            <small style="display: block; margin-top: 10px; font-size: 11px;">₹80 more to redeem ₹200</small>
         </div>
 
-        <div class="mission-card">
-            <div class="mission-info">
-                <h4>Earn ₹10 Instantly! 🎁</h4>
-                <p>Share your review on Instagram Story</p>
+        <div style="background: #161b16; border-radius: 15px; padding: 15px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #c5a059;">
+            <div>
+                <h4 style="margin: 0; font-size: 14px;">Earn ₹10 Instantly! 🎁</h4>
+                <p style="margin: 0; font-size: 11px; opacity: 0.7;">Share review on Instagram Story</p>
             </div>
-            <button class="share-btn" onclick="shareOnIG()">Share Story</button>
+            <button onclick="alert('Story Generating...') " style="background: #c5a059; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">Share</button>
         </div>
 
-        <div class="ai-agent-box">
-            <div class="agent-header">
-                <span class="bot-icon">🤖</span>
-                <b>Groq AI Agent</b>
-            </div>
-            <p id="ai-suggestion">Thinking of a perfect combo for you...</p>
-        </div>
-
-        <nav class="bottom-nav">
-            <a href="dashboard.html" class="active">🏠 Home</a>
-            <a href="menu.html">📜 Menu</a>
-            <a href="#">🎁 Offers</a>
-            <a href="#">⚙️ Profile</a>
+        <nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #051a0a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #c5a059;">
+            <a href="dashboard.html" style="color: #c5a059; text-decoration: none;">🏠 Home</a>
+            <a href="menu.html" style="color: #fff; text-decoration: none;">📜 Menu</a>
+            <a href="#" style="color: #fff; text-decoration: none;">🎁 Offers</a>
         </nav>
     </div>
-
-    <canvas id="storyCanvas" style="display:none;" width="1080" height="1920"></canvas>
-
-    <script src="public/script.js"></script>
 </body>
 </html>
-
