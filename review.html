@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rate The Biryani Box | Bhopal</title>
+  <link rel="stylesheet" href="public/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* This page is standalone — works perfectly when shared via QR code or link */
+    body { background: #000; }
+    .review-app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #0a2910 0%, #071f0a 60%, #020d03 100%);
+      padding-bottom: 40px;
+    }
+
+    .review-hero {
+      text-align: center;
+      padding: 30px 24px 20px;
+      background: linear-gradient(180deg, rgba(197,160,89,0.08) 0%, transparent 100%);
+      border-bottom: 1px solid rgba(197,160,89,0.1);
+    }
+    .review-ornament { color: var(--gold); font-size: 18px; letter-spacing: 6px; opacity: 0.5; }
+    .review-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin: 8px 0 4px;
+    }
+    .review-brand-sub {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+    }
+    .review-cta {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    /* Stars */
+    .star-section { text-align: center; padding: 20px 24px 10px; }
+    .star-question { font-size: 16px; font-weight: 600; color: white; margin-bottom: 16px; }
+    .stars-wrap { display: flex; justify-content: center; gap: 6px; }
+    .star {
+      font-size: 52px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.15);
+      transition: color 0.15s, transform 0.15s;
+      line-height: 1;
+      user-select: none;
+    }
+    .star.lit { color: #f1c40f; }
+    .star:hover { transform: scale(1.15); }
+    .star-label {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 22px;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    /* Sections */
+    .positive-section, .negative-section { display: none; padding: 0 20px; }
+    .positive-section.show, .negative-section.show { display: block; }
+
+    /* Suggestions */
+    .suggest-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 14px;
+      text-align: center;
+      padding: 0 4px;
+    }
+    .suggest-card {
+      background: var(--dark-card);
+      border: 1.5px solid #1e2e1e;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .suggest-card:hover, .suggest-card:active {
+      border-color: var(--gold);
+      background: rgba(197,160,89,0.06);
+    }
+    .suggest-card.copied {
+      border-color: #2ed573;
+      background: rgba(46,213,115,0.05);
+    }
+    .suggest-card-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.85);
+      padding-right: 32px;
+    }
+    .suggest-copy-hint {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-size: 9px;
+      color: var(--gold);
+      font-weight: 600;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .suggest-card.copied .suggest-copy-hint { color: #2ed573; opacity: 1; }
+
+    .copied-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #2ed573;
+      color: #000;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: none;
+    }
+    .suggest-card.copied .copied-badge { display: block; }
+
+    .review-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 8px 0 16px;
+      padding: 0 20px;
+      line-height: 1.5;
+    }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: calc(100% - 40px);
+      margin: 0 20px 16px;
+      background: #4285f4;
+      color: white;
+      padding: 16px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(66,133,244,0.35);
+      transition: opacity 0.2s;
+    }
+    .google-btn:hover { opacity: 0.92; }
+    .google-icon {
+      width: 24px; height: 24px;
+      background: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    .reward-strip {
+      margin: 0 20px 20px;
+      background: rgba(197,160,89,0.08);
+      border: 1px dashed var(--border-gold-strong);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .reward-strip h4 { color: var(--gold); font-size: 15px; font-weight: 700; }
+    .reward-strip p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Negative form */
+    .neg-title { font-size: 15px; font-weight: 600; color: white; text-align: center; margin-bottom: 14px; }
+    .neg-options { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .neg-option {
+      background: var(--dark-card);
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .neg-option.sel, .neg-option:hover {
+      background: rgba(255,100,100,0.15);
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+    .neg-textarea {
+      width: 100%;
+      background: var(--dark-card);
+      border: 1px solid var(--border-gold);
+      color: white;
+      border-radius: 12px;
+      padding: 14px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      resize: vertical;
+      min-height: 100px;
+      outline: none;
+      margin-bottom: 14px;
+    }
+    .neg-submit {
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    /* Share via App section */
+    .share-section {
+      margin: 0 20px 20px;
+      background: var(--dark-card);
+      border: 1px solid #1e2e1e;
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .share-section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: rgba(255,255,255,0.7); }
+    .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .share-app-btn {
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .share-app-btn:hover { opacity: 0.85; }
+    .wa-btn { background: #25d366; color: white; }
+    .ig-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); color: white; }
+
+    /* Back link */
+    .back-to-app {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .back-to-app a { color: var(--gold); text-decoration: none; }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop { animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  </style>
+</head>
+<body>
+<div class="review-app">
+
+  <!-- Hero -->
+  <div class="review-hero">
+    <div class="review-ornament">✦ ✦ ✦</div>
+    <div class="review-brand">The Biryani<br>Box</div>
+    <div class="review-brand-sub">Bhopal's Royal Kitchen</div>
+    <div class="review-cta">
+      Aapka feedback hamare liye<br>
+      <b style="color: var(--gold);">bohot qimti hai! 💛</b>
+    </div>
+  </div>
+
+  <!-- Stars -->
+  <div class="star-section">
+    <div class="star-question">Aapka experience kaisa raha?</div>
+    <div class="stars-wrap" id="stars">
+      <span class="star" data-v="1" onclick="rateStar(1)">★</span>
+      <span class="star" data-v="2" onclick="rateStar(2)">★</span>
+      <span class="star" data-v="3" onclick="rateStar(3)">★</span>
+      <span class="star" data-v="4" onclick="rateStar(4)">★</span>
+      <span class="star" data-v="5" onclick="rateStar(5)">★</span>
+    </div>
+    <div class="star-label" id="star-label">Tap to rate us</div>
+  </div>
+
+  <!-- POSITIVE SECTION (4-5 stars) -->
+  <div class="positive-section" id="pos-section">
+
+    <div class="reward-strip">
+      <h4>🎉 Shukriya! Aap amazing ho!</h4>
+      <p>Niche se ek review copy karo → Google par paste karo → Instantly ₹10 paao!</p>
+    </div>
+
+    <div class="suggest-title">Niche diye gaye review ko tap karke copy karein:</div>
+
+    <div id="suggestions-list"></div>
+
+    <div class="review-note">
+      📋 Copy karne ke baad "Post on Google" button dabao aur review paste karo
+    </div>
+
+    <a href="https://search.google.com/local/writereview?placeid=ChIJi2dAy59DfDkRA2gvIzK7_jY" class="google-btn" target="_blank" id="google-btn">
+      <div class="google-icon">G</div>
+      Post on Google Review
+    </a>
+
+    <div class="share-section">
+      <div class="share-section-title">📤 Dosto ko bhi share karo:</div>
+      <div class="share-btns">
+        <button class="share-app-btn wa-btn" onclick="shareWhatsApp()">📱 WhatsApp</button>
+        <button class="share-app-btn ig-btn" onclick="shareInstagram()">📸 Instagram</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NEGATIVE SECTION (1-3 stars) -->
+  <div class="negative-section" id="neg-section">
+    <div class="neg-title">😔 Hamein dukh hai! Batao kya hua?</div>
+    <div class="neg-options" id="neg-options">
+      <div class="neg-option" onclick="toggleNeg(this)">🍛 Taste theek nahi tha</div>
+      <div class="neg-option" onclick="toggleNeg(this)">🚚 Delivery late thi</div>
+      <div class="neg-option" onclick="toggleNeg(this)">📦 Packing kharab thi</div>
+      <div class="neg-option" onclick="toggleNeg(this)">💰 Price zyada laga</div>
+      <div class="neg-option" onclick="toggleNeg(this)">🧂 Portion kam tha</div>
+      <div class="neg-option" onclick="toggleNeg(this)">😷 Hygiene issue</div>
+    </div>
+    <textarea class="neg-textarea" placeholder="Aur detail mein batao — hum sudharne ki koshish karenge..."></textarea>
+    <button class="neg-submit" onclick="submitNeg()">📨 Feedback Bhejo</button>
+  </div>
+
+  <!-- Back to app -->
+  <div class="back-to-app">
+    <a href="dashboard.html">← Elite Club mein wapas jao</a>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const starLabels = {
+  1: '😞 Bohot bura laga',
+  2: '😕 Theek nahi tha',
+  3: '😐 Average tha',
+  4: '😊 Accha tha!',
+  5: '🤩 Zabardast! Bilkul perfect!'
+};
+
+// All 8 review suggestions — shown based on star rating
+const allReviews = {
+  5: [
+    "Best Chicken Biryani in Bhopal! The Biryani Box is hands down the king of biryani here. Their Chicken Dum Biryani is slow-cooked to perfection — tender chicken, fragrant basmati, and the perfect spice level. Packing is excellent and delivery was fast. 10/10, highly recommended!",
+    "Maine The Biryani Box se order kiya aur taste lajawab tha! Chicken Tikka 21 Spices ka combination ekdum unique hai — secret masalon ki khushbu gharon tak aati hai. Raita & Salan ka combo perfect tha. Bhopal mein best biryani ki baat hogi toh yehi naam aayega!",
+    "Bhopal ka best cloud kitchen for biryani lovers! Fresh ingredients, royal taste aur super fast delivery. Crispy Lollipop ke saath Dum Biryani ka combo perfect hai. Hum har week order karte hain — quality kabhi compromise nahi hoti. Must try for anyone in Bhopal!",
+    "The Biryani Box is my family's favourite! Tried their All-in-One Combo and we were blown away — biryani, starters, cold drink sab perfect tha. ₹649 mein itna sab milta hai? Unbelievable value! Bhopal mein best biryani delivery experience. Definitely coming back!"
+  ],
+  4: [
+    "Very good biryani from The Biryani Box Bhopal! Ordered Chicken Dum Biryani (Full) and it was absolutely delicious — perfect spice level and nice portion size. Packaging was neat and delivery was on time. One of the best biryani places in Bhopal, will definitely order again!",
+    "Bhopal mein acchi biryani dhundh rahe the toh The Biryani Box mila. Chicken Tikka 21 Spices try kiya aur bohot pasand aaya! Taste authentic hai, ingredients fresh hain. Crispy Lollipop bhi mast crispy the. Overall great experience — recommended for biryani lovers!"
+  ]
+};
+
+let currentRating = 0;
+let copiedText = '';
+
+function rateStar(n) {
+  currentRating = n;
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('lit', i < n);
+  });
+  document.getElementById('star-label').textContent = starLabels[n] || '';
+
+  // Show sections
+  const pos = document.getElementById('pos-section');
+  const neg = document.getElementById('neg-section');
+
+  if (n >= 4) {
+    neg.classList.remove('show');
+    pos.classList.add('show');
+    pos.classList.add('animate-pop');
+    loadSuggestions(n);
+  } else if (n >= 1) {
+    pos.classList.remove('show');
+    neg.classList.add('show');
+    neg.classList.add('animate-pop');
+  }
+}
+
+function loadSuggestions(rating) {
+  const reviews = allReviews[rating] || allReviews[5];
+  const list = document.getElementById('suggestions-list');
+  list.innerHTML = '';
+
+  reviews.forEach((text, idx) => {
+    const card = document.createElement('div');
+    card.className = 'suggest-card';
+    card.id = 'sc-' + idx;
+    card.innerHTML = `
+      <div class="suggest-card-text">${text}</div>
+      <div class="suggest-copy-hint">📋 Tap to copy</div>
+      <div class="copied-badge">✓ Copied!</div>
+    `;
+    card.onclick = () => copyReview(text, card, idx);
+    list.appendChild(card);
+  });
+}
+
+function copyReview(text, card, idx) {
+  // Remove copied from all
+  document.querySelectorAll('.suggest-card').forEach(c => c.classList.remove('copied'));
+  
+  // Copy to clipboard
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      card.classList.add('copied');
+      copiedText = text;
+      document.querySelector('.suggest-copy-hint', card).textContent = '✓ Copied!';
+      showToast('Review copy ho gaya! Ab Google button dabao 🎉');
+      
+      // Highlight Google button
+      const gbtn = document.getElementById('google-btn');
+      gbtn.style.animation = 'none';
+      gbtn.style.boxShadow = '0 0 20px rgba(66,133,244,0.8)';
+      setTimeout(() => gbtn.style.boxShadow = '0 6px 20px rgba(66,133,244,0.35)', 2000);
+    });
+  } else {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    card.classList.add('copied');
+    copiedText = text;
+    showToast('Review copy ho gaya! Ab Google button dabao 🎉');
+  }
+  
+  // Add ₹10 to wallet (demo)
+  const user = JSON.parse(localStorage.getItem('bb_user') || '{}');
+  if (user && !user.reviewCopied) {
+    user.reviewCopied = true;
+    user.balance = (user.balance || 120) + 10;
+    localStorage.setItem('bb_user', JSON.stringify(user));
+    setTimeout(() => showToast('🎉 ₹10 aapke wallet mein add ho gaya!'), 3000);
+  }
+}
+
+function toggleNeg(el) { el.classList.toggle('sel'); }
+
+function submitNeg() {
+  const feedback = document.querySelector('.neg-textarea').value;
+  const selected = Array.from(document.querySelectorAll('.neg-option.sel')).map(e => e.textContent);
+  showToast('Feedback mila! Hum jald improve karenge. Shukriya! 🙏');
+  setTimeout(() => {
+    document.getElementById('neg-section').classList.remove('show');
+    document.getElementById('star-label').textContent = 'Shukriya aapke feedback ke liye! 🙏';
+  }, 1000);
+}
+
+function shareWhatsApp() {
+  const msg = '🍛 *The Biryani Box Bhopal*%0A%0AAmazing biryani hai yaar! Zaroor try karo.%0ARate & review karo aur ₹10 paao!%0A%0A' + window.location.href;
+  window.open('https://wa.me/?text=' + msg, '_blank');
+}
+
+function shareInstagram() {
+  navigator.clipboard.writeText('🍛 The Biryani Box Bhopal — Best biryani in town! ' + window.location.href);
+  showToast('Link copied! Instagram story mein paste karo 📸');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
