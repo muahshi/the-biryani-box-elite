@@ -2,271 +2,189 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rate The Biryani Box | Bhopal</title>
-  <link rel="stylesheet" href="public/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Rate The Biryani Box — Bhopal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ ALL CSS INLINE — works perfectly via QR scan, no external CSS dependency -->
   <style>
-    /* This page is standalone — works perfectly when shared via QR code or link */
-    body { background: #000; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --gold: #c5a059; --gold-light: #e0c07a; --gold-dark: #9a7a3a;
+      --primary: #071f0a; --dark-card: #0e1f0e;
+      --text-muted: rgba(255,255,255,0.55);
+      --border-gold: rgba(197,160,89,0.25);
+      --border-gold-strong: rgba(197,160,89,0.5);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      display: flex; justify-content: center;
+      color: white; min-height: 100vh;
+    }
     .review-app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: 0 auto;
+      width: 100%; max-width: 430px; min-height: 100vh;
       background: linear-gradient(180deg, #0a2910 0%, #071f0a 60%, #020d03 100%);
       padding-bottom: 40px;
     }
 
+    /* HERO */
     .review-hero {
-      text-align: center;
-      padding: 30px 24px 20px;
+      text-align: center; padding: 30px 24px 20px;
       background: linear-gradient(180deg, rgba(197,160,89,0.08) 0%, transparent 100%);
-      border-bottom: 1px solid rgba(197,160,89,0.1);
+      border-bottom: 1px solid rgba(197,160,89,0.12);
     }
-    .review-ornament { color: var(--gold); font-size: 18px; letter-spacing: 6px; opacity: 0.5; }
+    .review-ornament { color: var(--gold); font-size: 18px; letter-spacing: 6px; opacity: 0.5; margin-bottom: 10px; }
     .review-brand {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-      margin: 8px 0 4px;
+      font-size: 36px; font-weight: 700; color: var(--gold); line-height: 1;
+      margin: 0 0 4px;
     }
     .review-brand-sub {
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold-dark);
+      font-size: 10px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold-dark);
     }
-    .review-cta {
-      font-size: 14px;
-      color: rgba(255,255,255,0.7);
-      margin-top: 12px;
-      line-height: 1.5;
-    }
+    .review-cta { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 12px; line-height: 1.6; }
 
-    /* Stars */
-    .star-section { text-align: center; padding: 20px 24px 10px; }
-    .star-question { font-size: 16px; font-weight: 600; color: white; margin-bottom: 16px; }
-    .stars-wrap { display: flex; justify-content: center; gap: 6px; }
+    /* STARS */
+    .star-section { text-align: center; padding: 24px 24px 12px; }
+    .star-question { font-size: 16px; font-weight: 600; color: white; margin-bottom: 18px; }
+    .stars-wrap {
+      display: flex; justify-content: center; gap: 8px;
+    }
     .star {
-      font-size: 52px;
-      cursor: pointer;
+      font-size: 52px; cursor: pointer;
       color: rgba(255,255,255,0.15);
       transition: color 0.15s, transform 0.15s;
-      line-height: 1;
-      user-select: none;
+      line-height: 1; user-select: none;
+      /* ✅ Explicitly set display to prevent OTP-like rendering */
+      display: inline-block;
     }
     .star.lit { color: #f1c40f; }
-    .star:hover { transform: scale(1.15); }
+    .star:hover { transform: scale(1.2); }
     .star-label {
-      margin-top: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      min-height: 22px;
-      color: var(--gold);
-      text-align: center;
+      margin-top: 12px; font-size: 15px; font-weight: 600;
+      min-height: 22px; color: var(--gold); text-align: center;
     }
 
-    /* Sections */
-    .positive-section, .negative-section { display: none; padding: 0 20px; }
+    /* SECTIONS */
+    .positive-section, .negative-section { display: none; padding: 0 20px 10px; animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1); }
     .positive-section.show, .negative-section.show { display: block; }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
 
-    /* Suggestions */
+    /* REWARD STRIP */
+    .reward-strip {
+      background: rgba(197,160,89,0.08); border: 1px dashed var(--border-gold-strong);
+      border-radius: 14px; padding: 14px 16px; text-align: center; margin-bottom: 16px;
+    }
+    .reward-strip h4 { color: var(--gold); font-size: 15px; font-weight: 700; }
+    .reward-strip p { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+
+    /* SUGGEST CARDS */
     .suggest-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 14px;
-      text-align: center;
-      padding: 0 4px;
+      font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85);
+      margin-bottom: 14px; text-align: center; line-height: 1.4;
     }
     .suggest-card {
-      background: var(--dark-card);
-      border: 1.5px solid #1e2e1e;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
+      background: var(--dark-card); border: 1.5px solid #1e2e1e;
+      border-radius: 16px; padding: 16px; margin-bottom: 12px;
+      cursor: pointer; transition: all 0.2s; position: relative;
     }
     .suggest-card:hover, .suggest-card:active {
-      border-color: var(--gold);
-      background: rgba(197,160,89,0.06);
+      border-color: var(--gold); background: rgba(197,160,89,0.06);
     }
-    .suggest-card.copied {
-      border-color: #2ed573;
-      background: rgba(46,213,115,0.05);
-    }
-    .suggest-card-text {
-      font-size: 13px;
-      line-height: 1.65;
-      color: rgba(255,255,255,0.85);
-      padding-right: 32px;
-    }
+    .suggest-card.copied { border-color: #2ed573; background: rgba(46,213,115,0.05); }
+    .suggest-card-text { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.85); padding-right: 32px; }
     .suggest-copy-hint {
-      position: absolute;
-      bottom: 10px;
-      right: 12px;
-      font-size: 9px;
-      color: var(--gold);
-      font-weight: 600;
-      opacity: 0.7;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      position: absolute; bottom: 10px; right: 12px;
+      font-size: 9px; color: var(--gold); font-weight: 600; opacity: 0.7;
+      display: flex; align-items: center; gap: 3px;
     }
     .suggest-card.copied .suggest-copy-hint { color: #2ed573; opacity: 1; }
-
     .copied-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #2ed573;
-      color: #000;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
-      display: none;
+      position: absolute; top: 10px; right: 10px;
+      background: #2ed573; color: #000; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 6px; display: none;
     }
     .suggest-card.copied .copied-badge { display: block; }
 
     .review-note {
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin: 8px 0 16px;
-      padding: 0 20px;
-      line-height: 1.5;
+      text-align: center; font-size: 12px; color: var(--text-muted);
+      margin: 8px 0 16px; line-height: 1.55;
     }
 
+    /* GOOGLE BUTTON */
     .google-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: calc(100% - 40px);
-      margin: 0 20px 16px;
-      background: #4285f4;
-      color: white;
-      padding: 16px;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 15px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(66,133,244,0.35);
-      transition: opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; background: #4285f4; color: white;
+      padding: 16px; border-radius: 14px; font-weight: 700; font-size: 15px;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(66,133,244,0.35); transition: opacity 0.2s;
+      margin-bottom: 16px; font-family: 'Poppins', sans-serif;
     }
     .google-btn:hover { opacity: 0.92; }
     .google-icon {
-      width: 24px; height: 24px;
-      background: white;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
+      width: 26px; height: 26px; background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-weight: 900; color: #4285f4;
+      font-size: 15px; flex-shrink: 0;
     }
 
-    .reward-strip {
-      margin: 0 20px 20px;
-      background: rgba(197,160,89,0.08);
-      border: 1px dashed var(--border-gold-strong);
-      border-radius: 14px;
-      padding: 14px 16px;
-      text-align: center;
-    }
-    .reward-strip h4 { color: var(--gold); font-size: 15px; font-weight: 700; }
-    .reward-strip p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
-    /* Negative form */
-    .neg-title { font-size: 15px; font-weight: 600; color: white; text-align: center; margin-bottom: 14px; }
-    .neg-options { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .neg-option {
-      background: var(--dark-card);
-      border: 1px solid #2a2a2a;
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .neg-option.sel, .neg-option:hover {
-      background: rgba(255,100,100,0.15);
-      border-color: #ff6b6b;
-      color: #ff6b6b;
-    }
-    .neg-textarea {
-      width: 100%;
-      background: var(--dark-card);
-      border: 1px solid var(--border-gold);
-      color: white;
-      border-radius: 12px;
-      padding: 14px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      resize: vertical;
-      min-height: 100px;
-      outline: none;
-      margin-bottom: 14px;
-    }
-    .neg-submit {
-      width: 100%;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-
-    /* Share via App section */
+    /* SHARE SECTION */
     .share-section {
-      margin: 0 20px 20px;
-      background: var(--dark-card);
-      border: 1px solid #1e2e1e;
-      border-radius: 16px;
-      padding: 16px;
+      background: var(--dark-card); border: 1px solid #1e2e1e;
+      border-radius: 16px; padding: 16px; margin-bottom: 16px;
     }
     .share-section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: rgba(255,255,255,0.7); }
     .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .share-app-btn {
-      padding: 11px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: opacity 0.2s;
+      padding: 12px; border: none; border-radius: 12px;
+      font-weight: 700; font-size: 12.5px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: opacity 0.2s; font-family: 'Poppins', sans-serif;
     }
     .share-app-btn:hover { opacity: 0.85; }
     .wa-btn { background: #25d366; color: white; }
-    .ig-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); color: white; }
+    .ig-btn { background: linear-gradient(45deg, #405de6, #833ab4, #c13584, #fd1d1d); color: white; }
 
-    /* Back link */
-    .back-to-app {
-      text-align: center;
-      padding: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
+    /* NEGATIVE SECTION */
+    .neg-title { font-size: 15px; font-weight: 600; color: white; text-align: center; margin-bottom: 14px; }
+    .neg-options { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .neg-option {
+      background: var(--dark-card); border: 1px solid #2a2a2a;
+      border-radius: 20px; padding: 8px 16px; font-size: 12px; cursor: pointer;
+      transition: all 0.2s; font-family: 'Poppins', sans-serif; color: white;
     }
-    .back-to-app a { color: var(--gold); text-decoration: none; }
+    .neg-option.sel, .neg-option:hover { background: rgba(255,100,100,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+    .neg-textarea {
+      width: 100%; background: var(--dark-card); border: 1px solid var(--border-gold);
+      color: white; border-radius: 12px; padding: 14px;
+      font-family: 'Poppins', sans-serif; font-size: 13px;
+      resize: vertical; min-height: 100px; outline: none; margin-bottom: 14px;
+    }
+    .neg-submit {
+      width: 100%; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2); color: white;
+      padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px;
+      cursor: pointer; margin-bottom: 20px; font-family: 'Poppins', sans-serif;
+    }
 
-    @keyframes popIn {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    /* BACK LINK */
+    .back-to-app { text-align: center; padding: 10px 20px 20px; font-size: 12px; color: var(--text-muted); }
+    .back-to-app a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; top: 20px; left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: #1a3a1a; border: 1px solid var(--gold); color: var(--gold);
+      padding: 12px 22px; border-radius: 40px; font-size: 13px; font-weight: 600;
+      z-index: 999; transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+      max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      pointer-events: none;
     }
-    .animate-pop { animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -279,7 +197,7 @@
     <div class="review-brand-sub">Bhopal's Royal Kitchen</div>
     <div class="review-cta">
       Aapka feedback hamare liye<br>
-      <b style="color: var(--gold);">bohot qimti hai! 💛</b>
+      <b style="color:var(--gold);">bohot qimti hai! 💛</b>
     </div>
   </div>
 
@@ -287,36 +205,29 @@
   <div class="star-section">
     <div class="star-question">Aapka experience kaisa raha?</div>
     <div class="stars-wrap" id="stars">
-      <span class="star" data-v="1" onclick="rateStar(1)">★</span>
-      <span class="star" data-v="2" onclick="rateStar(2)">★</span>
-      <span class="star" data-v="3" onclick="rateStar(3)">★</span>
-      <span class="star" data-v="4" onclick="rateStar(4)">★</span>
-      <span class="star" data-v="5" onclick="rateStar(5)">★</span>
+      <span class="star" onclick="rateStar(1)">★</span>
+      <span class="star" onclick="rateStar(2)">★</span>
+      <span class="star" onclick="rateStar(3)">★</span>
+      <span class="star" onclick="rateStar(4)">★</span>
+      <span class="star" onclick="rateStar(5)">★</span>
     </div>
-    <div class="star-label" id="star-label">Tap to rate us</div>
+    <div class="star-label" id="star-label">⭐ Tap to rate us</div>
   </div>
 
-  <!-- POSITIVE SECTION (4-5 stars) -->
+  <!-- POSITIVE (4-5 stars) -->
   <div class="positive-section" id="pos-section">
-
     <div class="reward-strip">
       <h4>🎉 Shukriya! Aap amazing ho!</h4>
-      <p>Niche se ek review copy karo → Google par paste karo → Instantly ₹10 paao!</p>
+      <p>Niche se ek review copy karo → Google par paste karo → Instantly <b style="color:var(--gold)">₹10</b> paao!</p>
     </div>
-
     <div class="suggest-title">Niche diye gaye review ko tap karke copy karein:</div>
-
     <div id="suggestions-list"></div>
-
-    <div class="review-note">
-      📋 Copy karne ke baad "Post on Google" button dabao aur review paste karo
-    </div>
-
-    <a href="https://search.google.com/local/writereview?placeid=ChIJi2dAy59DfDkRA2gvIzK7_jY" class="google-btn" target="_blank" id="google-btn">
+    <div class="review-note">📋 Copy karne ke baad "Post on Google" button dabao aur review paste karo</div>
+    <a href="https://search.google.com/local/writereview?placeid=ChIJi2dAy59DfDkRA2gvIzK7_jY"
+       class="google-btn" target="_blank" id="google-btn">
       <div class="google-icon">G</div>
       Post on Google Review
     </a>
-
     <div class="share-section">
       <div class="share-section-title">📤 Dosto ko bhi share karo:</div>
       <div class="share-btns">
@@ -324,10 +235,9 @@
         <button class="share-app-btn ig-btn" onclick="shareInstagram()">📸 Instagram</button>
       </div>
     </div>
-
   </div>
 
-  <!-- NEGATIVE SECTION (1-3 stars) -->
+  <!-- NEGATIVE (1-3 stars) -->
   <div class="negative-section" id="neg-section">
     <div class="neg-title">😔 Hamein dukh hai! Batao kya hua?</div>
     <div class="neg-options" id="neg-options">
@@ -339,19 +249,20 @@
       <div class="neg-option" onclick="toggleNeg(this)">😷 Hygiene issue</div>
     </div>
     <textarea class="neg-textarea" placeholder="Aur detail mein batao — hum sudharne ki koshish karenge..."></textarea>
-    <button class="neg-submit" onclick="submitNeg()">📨 Feedback Bhejo</button>
+    <button class="neg-submit" onclick="submitNeg()">📨 Feedback Bhejo WhatsApp Pe</button>
   </div>
 
-  <!-- Back to app -->
+  <!-- Back -->
   <div class="back-to-app">
     <a href="dashboard.html">← Elite Club mein wapas jao</a>
   </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+const WHATSAPP = '919585877758';
+
 const starLabels = {
   1: '😞 Bohot bura laga',
   2: '😕 Theek nahi tha',
@@ -360,7 +271,6 @@ const starLabels = {
   5: '🤩 Zabardast! Bilkul perfect!'
 };
 
-// All 8 review suggestions — shown based on star rating
 const allReviews = {
   5: [
     "Best Chicken Biryani in Bhopal! The Biryani Box is hands down the king of biryani here. Their Chicken Dum Biryani is slow-cooked to perfection — tender chicken, fragrant basmati, and the perfect spice level. Packing is excellent and delivery was fast. 10/10, highly recommended!",
@@ -375,118 +285,112 @@ const allReviews = {
 };
 
 let currentRating = 0;
-let copiedText = '';
 
+/* ── STAR RATING ── */
 function rateStar(n) {
   currentRating = n;
-  document.querySelectorAll('.star').forEach((s, i) => {
-    s.classList.toggle('lit', i < n);
-  });
+  const stars = document.querySelectorAll('.star');
+  stars.forEach((s, i) => s.classList.toggle('lit', i < n));
   document.getElementById('star-label').textContent = starLabels[n] || '';
-
-  // Show sections
   const pos = document.getElementById('pos-section');
   const neg = document.getElementById('neg-section');
-
   if (n >= 4) {
     neg.classList.remove('show');
     pos.classList.add('show');
-    pos.classList.add('animate-pop');
     loadSuggestions(n);
+    setTimeout(() => pos.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   } else if (n >= 1) {
     pos.classList.remove('show');
     neg.classList.add('show');
-    neg.classList.add('animate-pop');
+    setTimeout(() => neg.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   }
 }
 
+/* ── LOAD REVIEW CARDS ── */
 function loadSuggestions(rating) {
   const reviews = allReviews[rating] || allReviews[5];
   const list = document.getElementById('suggestions-list');
   list.innerHTML = '';
-
   reviews.forEach((text, idx) => {
     const card = document.createElement('div');
     card.className = 'suggest-card';
-    card.id = 'sc-' + idx;
     card.innerHTML = `
       <div class="suggest-card-text">${text}</div>
       <div class="suggest-copy-hint">📋 Tap to copy</div>
       <div class="copied-badge">✓ Copied!</div>
     `;
-    card.onclick = () => copyReview(text, card, idx);
+    card.onclick = () => copyReview(text, card);
     list.appendChild(card);
   });
 }
 
-function copyReview(text, card, idx) {
-  // Remove copied from all
+/* ── COPY REVIEW ── */
+function copyReview(text, card) {
   document.querySelectorAll('.suggest-card').forEach(c => c.classList.remove('copied'));
-  
-  // Copy to clipboard
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      card.classList.add('copied');
-      copiedText = text;
-      document.querySelector('.suggest-copy-hint', card).textContent = '✓ Copied!';
-      showToast('Review copy ho gaya! Ab Google button dabao 🎉');
-      
-      // Highlight Google button
-      const gbtn = document.getElementById('google-btn');
-      gbtn.style.animation = 'none';
-      gbtn.style.boxShadow = '0 0 20px rgba(66,133,244,0.8)';
-      setTimeout(() => gbtn.style.boxShadow = '0 6px 20px rgba(66,133,244,0.35)', 2000);
-    });
-  } else {
-    // Fallback for older browsers
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
+  const doCopy = () => {
     card.classList.add('copied');
-    copiedText = text;
-    showToast('Review copy ho gaya! Ab Google button dabao 🎉');
-  }
-  
-  // Add ₹10 to wallet (demo)
-  const user = JSON.parse(localStorage.getItem('bb_user') || '{}');
-  if (user && !user.reviewCopied) {
-    user.reviewCopied = true;
-    user.balance = (user.balance || 120) + 10;
-    localStorage.setItem('bb_user', JSON.stringify(user));
-    setTimeout(() => showToast('🎉 ₹10 aapke wallet mein add ho gaya!'), 3000);
+    showToast('📋 Review copy ho gaya! Ab Google button dabao 🎉');
+    const gbtn = document.getElementById('google-btn');
+    gbtn.style.boxShadow = '0 0 24px rgba(66,133,244,0.8)';
+    setTimeout(() => gbtn.style.boxShadow = '0 6px 20px rgba(66,133,244,0.35)', 2500);
+    // Add ₹10 reward (demo)
+    try {
+      const user = JSON.parse(localStorage.getItem('bb_user') || '{}');
+      if (!user.reviewCopied) {
+        user.reviewCopied = true;
+        user.balance = (user.balance || 120) + 10;
+        localStorage.setItem('bb_user', JSON.stringify(user));
+        setTimeout(() => showToast('🎉 ₹10 aapke wallet mein add ho gaya!'), 3200);
+      }
+    } catch(e) {}
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(doCopy).catch(() => fallbackCopy(text, doCopy));
+  } else {
+    fallbackCopy(text, doCopy);
   }
 }
 
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) { showToast('Copy failed — manually copy karo'); }
+  document.body.removeChild(ta);
+}
+
+/* ── NEGATIVE ── */
 function toggleNeg(el) { el.classList.toggle('sel'); }
 
 function submitNeg() {
-  const feedback = document.querySelector('.neg-textarea').value;
-  const selected = Array.from(document.querySelectorAll('.neg-option.sel')).map(e => e.textContent);
+  const feedback = document.querySelector('.neg-textarea').value.trim();
+  const selected = Array.from(document.querySelectorAll('.neg-option.sel')).map(e => e.textContent).join(', ');
+  const msg = `😔 *Negative Feedback — The Biryani Box*%0A%0A*Issues:* ${selected || 'Not specified'}%0A*Detail:* ${feedback || 'No details'}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
   showToast('Feedback mila! Hum jald improve karenge. Shukriya! 🙏');
-  setTimeout(() => {
-    document.getElementById('neg-section').classList.remove('show');
-    document.getElementById('star-label').textContent = 'Shukriya aapke feedback ke liye! 🙏';
-  }, 1000);
 }
 
+/* ── SHARE ── */
 function shareWhatsApp() {
-  const msg = '🍛 *The Biryani Box Bhopal*%0A%0AAmazing biryani hai yaar! Zaroor try karo.%0ARate & review karo aur ₹10 paao!%0A%0A' + window.location.href;
-  window.open('https://wa.me/?text=' + msg, '_blank');
+  const url = encodeURIComponent(window.location.href);
+  const msg = `🍛 *The Biryani Box Bhopal*%0A%0ABest biryani hai yaar! Rate karo aur ₹10 paao!%0A${window.location.href}`;
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
 }
 
 function shareInstagram() {
-  navigator.clipboard.writeText('🍛 The Biryani Box Bhopal — Best biryani in town! ' + window.location.href);
-  showToast('Link copied! Instagram story mein paste karo 📸');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText('🍛 The Biryani Box Bhopal — Best biryani! Rate karo aur ₹10 paao! ' + window.location.href);
+    showToast('Link copied! Instagram story mein paste karo 📸');
+  }
 }
 
+/* ── TOAST ── */
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
 }
 </script>
 </body>
