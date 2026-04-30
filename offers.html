@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elite Offers | The Biryani Box</title>
+  <link rel="stylesheet" href="public/style.css" />
+</head>
+<body>
+  <div class="app page-fade">
+
+    <div class="top-header">
+      <div class="brand-name">The Biryani Box</div>
+      <div class="notif-btn" onclick="location.href='dashboard.html'">🏠</div>
+    </div>
+
+    <!-- HERO VIDEO (optional) -->
+    <div class="hero-video-card">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="public/biryani.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay">
+        <div class="hero-logo">
+          <img src="public/logo.png" alt="logo" />
+        </div>
+        <div class="hero-title">Elite Offers</div>
+        <div class="hero-sub">Daily surprises • Royal savings</div>
+      </div>
+    </div>
+
+    <div class="section-title">Choose Your Plan</div>
+
+    <div class="offer-card">
+      <div class="offer-title">Silver</div>
+      <div class="offer-price">₹0 / Free • Basic Elite Rewards</div>
+      <ul class="offer-features">
+        <li><span class="feature-icon">✅</span> 5% Cashback Wallet</li>
+        <li><span class="feature-icon">✅</span> 1 Daily Surprise Deal</li>
+        <li><span class="feature-icon">✅</span> Basic AI Meal Suggestion</li>
+      </ul>
+      <button class="activate-btn" onclick="setPlan('Silver')">Activate Silver</button>
+    </div>
+
+    <div class="offer-card pro">
+      <div class="offer-title">Gold</div>
+      <div class="offer-price">₹199 / month • Most Popular</div>
+      <ul class="offer-features">
+        <li><span class="feature-icon">🔥</span> 10% Cashback Wallet</li>
+        <li><span class="feature-icon">🔥</span> Priority Delivery Slot</li>
+        <li><span class="feature-icon">🔥</span> AI Personalized Combo Builder</li>
+        <li><span class="feature-icon">🔥</span> 2 Surprise Coupons / Day</li>
+      </ul>
+      <button class="activate-btn" onclick="setPlan('Gold')">Activate Gold</button>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-title">Royal</div>
+      <div class="offer-price">₹499 / month • VIP</div>
+      <ul class="offer-features">
+        <li><span class="feature-icon">👑</span> 15% Cashback Wallet</li>
+        <li><span class="feature-icon">👑</span> Free Dessert (weekly)</li>
+        <li><span class="feature-icon">👑</span> AI Diet Mode (Spicy / Light / Protein)</li>
+        <li><span class="feature-icon">👑</span> Early Access to New Menu</li>
+      </ul>
+      <button class="activate-btn" onclick="setPlan('Royal')">Activate Royal</button>
+    </div>
+
+    <div class="spacer-20"></div>
+
+    <div class="bottom-nav">
+      <a class="nav-item" href="dashboard.html"><div class="nav-icon">🏠</div>Home</a>
+      <a class="nav-item" href="menu.html"><div class="nav-icon">🍽️</div>Menu</a>
+      <a class="nav-item active" href="offers.html"><div class="nav-icon">🎁</div>Offers</a>
+      <a class="nav-item" href="profile.html"><div class="nav-icon">👤</div>Profile</a>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showToast(msg){
+      const t=document.getElementById('toast');
+      t.textContent=msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),2400);
+    }
+
+    function setPlan(plan){
+      const raw = localStorage.getItem('bb_user');
+      if(!raw){ location.href='index.html'; return; }
+      const user = JSON.parse(raw);
+      user.tier = plan;
+      localStorage.setItem('bb_user', JSON.stringify(user));
+      showToast(plan + " plan activated ✅");
+      setTimeout(()=>location.href='dashboard.html',600);
+    }
+  </script>
+</body>
+</html>
