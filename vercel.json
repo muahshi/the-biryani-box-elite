@@ -1,10 +1,20 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/agent.py" }
-  ],
-  "functions": {
-    "api/*.py": {
-      "runtime": "python@3.9"
+  "version": 2,
+  "name": "the-biryani-box-elite",
+  "builds": [
+    {
+      "src": "**/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
 }
