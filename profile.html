@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile | The Biryani Box</title>
+  <link rel="stylesheet" href="public/style.css" />
+</head>
+<body>
+  <div class="app page-fade">
+
+    <div class="top-header">
+      <div class="brand-name">The Biryani Box</div>
+      <div class="notif-btn" onclick="location.href='dashboard.html'">🏠</div>
+    </div>
+
+    <div class="profile-header">
+      <div class="profile-avatar" id="avatar">👤</div>
+      <div class="profile-name" id="pname">Biryani Lover</div>
+      <div class="profile-phone" id="pphone">+91XXXXXXXXXX</div>
+    </div>
+
+    <div class="profile-menu">
+      <a class="profile-item" href="menu.html">
+        <div class="profile-item-icon">🍽️</div>
+        <div class="profile-item-text">
+          <div class="profile-item-title">Order Menu</div>
+          <div class="profile-item-sub">Pick your biryani & combos</div>
+        </div>
+        <div class="profile-item-arrow">›</div>
+      </a>
+
+      <div class="profile-item" onclick="openWallet()">
+        <div class="profile-item-icon">💰</div>
+        <div class="profile-item-text">
+          <div class="profile-item-title">Wallet & Rewards</div>
+          <div class="profile-item-sub" id="walletLine">Balance: ₹0 • Tier: Silver</div>
+        </div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+
+      <div class="profile-item" onclick="getAIMeal()">
+        <div class="profile-item-icon">🤖</div>
+        <div class="profile-item-text">
+          <div class="profile-item-title">AI Meal Suggestion</div>
+          <div class="profile-item-sub">Groq-powered personalized tip</div>
+        </div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+
+      <div class="profile-item" onclick="shareApp()">
+        <div class="profile-item-icon">📤</div>
+        <div class="profile-item-text">
+          <div class="profile-item-title">Share App</div>
+          <div class="profile-item-sub">Invite friends & earn rewards</div>
+        </div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+
+      <div class="profile-item" onclick="logout()">
+        <div class="profile-item-icon">🚪</div>
+        <div class="profile-item-text">
+          <div class="profile-item-title">Logout</div>
+          <div class="profile-item-sub">Switch number / clear session</div>
+        </div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="spacer-20"></div>
+
+    <div class="bottom-nav">
+      <a class="nav-item" href="dashboard.html"><div class="nav-icon">🏠</div>Home</a>
+      <a class="nav-item" href="menu.html"><div class="nav-icon">🍽️</div>Menu</a>
+      <a class="nav-item" href="offers.html"><div class="nav-icon">🎁</div>Offers</a>
+      <a class="nav-item active" href="profile.html"><div class="nav-icon">👤</div>Profile</a>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showToast(msg){
+      const t=document.getElementById('toast');
+      t.textContent=msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),2600);
+    }
+
+    function getUser(){
+      const raw = localStorage.getItem('bb_user');
+      if(!raw){ location.href='index.html'; return null; }
+      return JSON.parse(raw);
+    }
+
+    (function init(){
+      const u = getUser(); if(!u) return;
+      document.getElementById('pname').textContent = u.name || 'Biryani Lover';
+      document.getElementById('pphone').textContent = u.phone || '+91XXXXXXXXXX';
+      const bal = u.balance ?? 0;
+      const tier = u.tier || 'Silver';
+      document.getElementById('walletLine').textContent = `Balance: ₹${bal} • Tier: ${tier}`;
+      document.getElementById('avatar').textContent = (u.name && u.name.trim().length) ? u.name.trim()[0].toUpperCase() : '👤';
+    })();
+
+    function openWallet(){
+      showToast('Wallet feature: Dashboard pe balance dikh raha ✅');
+      setTimeout(()=>location.href='dashboard.html',500);
+    }
+
+    async function getAIMeal(){
+      // If your Vercel API route is working, this will fetch it
+      try{
+        const res = await fetch('/api/get-ai-tips');
+        if(!res.ok) throw new Error('API not ok');
+        const data = await res.json();
+        showToast(data.message || 'AI tip ready ✅');
+      }catch(e){
+        // fallback
+        const tips = [
+          "Aaj Lucknowi + Raita combo try karo 😋",
+          "Spicy mood? Hyderabadi + Mirchi ka salan 🔥",
+          "Light chahiye? Chicken Tikka biryani + salad ✅"
+        ];
+        showToast(tips[Math.floor(Math.random()*tips.length)]);
+      }
+    }
+
+    function shareApp(){
+      const url = location.origin + location.pathname.replace('profile.html','index.html');
+      const text = "The Biryani Box Elite Club ✨ Check this app: " + url;
+      if(navigator.share){
+        navigator.share({title:'The Biryani Box', text, url}).catch(()=>{});
+      }else{
+        navigator.clipboard.writeText(text);
+        showToast("Link copied ✅ WhatsApp pe paste kar do");
+      }
+    }
+
+    function logout(){
+      localStorage.removeItem('bb_user');
+      localStorage.removeItem('bb_phone');
+      showToast('Logged out ✅');
+      setTimeout(()=>location.href='index.html',600);
+    }
+  </script>
+</body>
+</html>
