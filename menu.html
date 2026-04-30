@@ -1,58 +1,613 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu | The Biryani Box</title>
-    <link rel="stylesheet" href="public/style.css">
-    <style>
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin: 20px 0; scrollbar-width: none; }
-        .cat-chip { background: var(--dark-card); padding: 8px 20px; border-radius: 20px; border: 1px solid #333; white-space: nowrap; font-size: 13px; }
-        .cat-chip.active { background: var(--gold); color: var(--primary); border-color: var(--gold); font-weight: bold; }
-        .menu-item { background: var(--dark-card); border-radius: 15px; display: flex; margin-bottom: 15px; overflow: hidden; border: 0.5px solid #222; }
-        .item-img { width: 100px; height: 100px; background: #222; display: flex; align-items: center; justify-content: center; }
-        .item-details { padding: 12px; flex: 1; }
-        .price-tag { color: var(--gold); font-weight: bold; font-size: 18px; margin-top: 5px; }
-        .ai-tag { background: rgba(197, 160, 89, 0.2); color: var(--gold); font-size: 10px; padding: 2px 8px; border-radius: 5px; display: inline-block; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu | The Biryani Box</title>
+  <link rel="stylesheet" href="public/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .menu-page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gold);
+      padding: 20px 20px 4px;
+    }
+    .menu-page-sub { font-size: 12px; color: var(--text-muted); padding: 0 20px 12px; }
+    .variant-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .vbtn {
+      background: rgba(197,160,89,0.12);
+      border: 1px solid var(--border-gold);
+      color: var(--gold);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-weight: 600;
+    }
+    .vbtn:hover, .vbtn.sel { background: var(--gold); color: var(--primary); }
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      width: 28px; height: 28px;
+      background: rgba(197,160,89,0.15);
+      border: 1px solid var(--border-gold);
+      border-radius: 8px;
+      color: var(--gold);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      transition: background 0.15s;
+    }
+    .qty-btn:hover { background: rgba(197,160,89,0.3); }
+    .qty-num { font-size: 14px; font-weight: 700; min-width: 16px; text-align: center; }
+    .cart-strip {
+      position: fixed;
+      bottom: 68px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 390px;
+      width: calc(100% - 40px);
+      background: var(--gold);
+      color: var(--primary);
+      padding: 14px 20px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(197,160,89,0.4);
+      z-index: 99;
+      transition: opacity 0.3s;
+    }
+    .cart-right { display: flex; align-items: center; gap: 8px; }
+    .cart-count {
+      background: var(--primary);
+      color: var(--gold);
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .ai-recommend-bar {
+      margin: 0 20px 12px;
+      background: rgba(100,149,237,0.1);
+      border: 1px solid rgba(100,149,237,0.3);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #6495ed;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Cart modal */
+    .cart-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .cart-modal-overlay.open { display: flex; }
+    .cart-modal {
+      background: #0e1f0e;
+      border: 1px solid var(--border-gold-strong);
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 430px;
+      max-height: 75vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .cart-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .cart-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 13px;
+    }
+    .cart-row-name { flex: 1; }
+    .cart-row-qty { color: var(--text-muted); margin: 0 12px; font-size: 12px; }
+    .cart-row-price { color: var(--gold); font-weight: 700; }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 14px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .checkout-btn {
+      width: 100%;
+      background: var(--gold);
+      color: var(--primary);
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+    .close-cart { float: right; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+  </style>
 </head>
 <body>
-    <div class="mobile-frame">
-        <h2 style="color: var(--gold);">Shahi Menu</h2>
-        
-        <div class="category-scroll">
-            <div class="cat-chip active">Biryanis</div>
-            <div class="cat-chip">Royal Starters</div>
-            <div class="cat-chip">Royal Combos</div>
-        </div>
+<div class="app page-fade">
 
-        <div class="menu-item">
-            <div class="item-img">🥘</div> <div class="item-details">
-                <span class="ai-tag">Chef's Choice</span>
-                <h4 style="margin:5px 0;">Chicken Dum Biryani</h4>
-                <p style="font-size: 11px; color: #aaa;">Slow cooked on dum, tender chicken.</p>
-                <div class="price-tag">₹169 <small style="font-size: 10px; color: #666;">(Half)</small></div>
-            </div>
-            <button style="background:none; border:none; color:var(--gold); font-size: 24px; padding-right:15px;">+</button>
-        </div>
+  <div class="menu-page-title">Shahi Menu 👑</div>
+  <div class="menu-page-sub">Fresh ingredients, royal taste — Bhopal ki shaan</div>
 
-        <div class="menu-item">
-            <div class="item-img">🍗</div>
-            <div class="item-details">
-                <h4 style="margin:5px 0;">Chicken Tikka 21 Spices</h4>
-                <p style="font-size: 11px; color: #aaa;">Secret blend of 21 spices, rich & bold.</p>
-                <div class="price-tag">₹199</div>
-            </div>
-            <button style="background:none; border:none; color:var(--gold); font-size: 24px; padding-right:15px;">+</button>
-        </div>
+  <!-- Search -->
+  <div class="search-bar">
+    <span>🔍</span>
+    <input type="text" placeholder="Search biryani, starters..." id="search-input" oninput="filterMenu()">
+  </div>
 
-        <nav class="bottom-nav">
-            <a href="dashboard.html">🏠 Home</a>
-            <a href="menu.html" class="active">📜 Menu</a>
-            <a href="#">🎁 Offers</a>
-            <a href="#">⚙️ Profile</a>
-        </nav>
+  <!-- AI Bar -->
+  <div class="ai-recommend-bar">
+    <span>🤖</span>
+    <span id="ai-menu-rec">Aaj <b>Chicken Tikka 21 Spices</b> try karo — Chef's Special! ₹249</span>
+  </div>
+
+  <!-- Category Chips -->
+  <div class="cat-scroll">
+    <div class="cat-chip active" onclick="scrollTo('biryanis', this)">🍛 Royal Biryanis</div>
+    <div class="cat-chip" onclick="scrollTo('starters', this)">🍗 Royal Starters</div>
+    <div class="cat-chip" onclick="scrollTo('combos', this)">🎉 Royal Combos</div>
+  </div>
+
+  <!-- ========== BIRYANIS ========== -->
+  <div class="menu-section" id="biryanis">
+    <div class="menu-section-title">🍛 Royal Biryanis</div>
+
+    <!-- Chicken Dum Biryani -->
+    <div class="menu-card" data-name="chicken dum biryani">
+      <div class="menu-card-img">🍛</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag tag-bestseller">⭐ BESTSELLER</span>
+            <span class="tag tag-ai">🤖 AI Pick</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">Chicken Dum Biryani</div>
+          <div class="item-desc">Slow cooked on dum, tender chicken, fragrant basmati</div>
+          <div class="variant-row" id="vr-1">
+            <button class="vbtn sel" onclick="selectVariant('1','Half',169,this)">Half ₹169</button>
+            <button class="vbtn" onclick="selectVariant('1','Full',219,this)">Full ₹219</button>
+            <button class="vbtn" onclick="selectVariant('1','1kg',469,this)">1kg ₹469</button>
+          </div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price" id="price-1">₹169</div>
+          <div class="qty-control" id="qc-1">
+            <button class="add-btn" onclick="addItem('Chicken Dum Biryani','1')">+</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Chicken Tikka 21 Spices -->
+    <div class="menu-card" data-name="chicken tikka 21 spices">
+      <div class="menu-card-img">🌶️</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag tag-chef">👨‍🍳 CHEF'S SPECIAL</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">Chicken Tikka 21 Spices</div>
+          <div class="item-desc">Secret blend of 21 spices, rich & bold flavours</div>
+          <div class="variant-row" id="vr-2">
+            <button class="vbtn sel" onclick="selectVariant('2','Half',199,this)">Half ₹199</button>
+            <button class="vbtn" onclick="selectVariant('2','Full',249,this)">Full ₹249</button>
+            <button class="vbtn" onclick="selectVariant('2','1kg',549,this)">1kg ₹549</button>
+          </div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price" id="price-2">₹199</div>
+          <div class="qty-control" id="qc-2">
+            <button class="add-btn" onclick="addItem('Chicken Tikka 21 Spices','2')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chicken Egg 21 Spices -->
+    <div class="menu-card" data-name="chicken egg 21 spices">
+      <div class="menu-card-img">🥚</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Chicken Egg 21 Spices</div>
+          <div class="item-desc">Whole eggs in spiced biryani, comfort in a bowl</div>
+          <div class="variant-row" id="vr-3">
+            <button class="vbtn sel" onclick="selectVariant('3','Half',199,this)">Half ₹199</button>
+            <button class="vbtn" onclick="selectVariant('3','Full',249,this)">Full ₹249</button>
+            <button class="vbtn" onclick="selectVariant('3','1kg',549,this)">1kg ₹549</button>
+          </div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price" id="price-3">₹199</div>
+          <div class="qty-control" id="qc-3">
+            <button class="add-btn" onclick="addItem('Chicken Egg 21 Spices','3')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chicken Dum 21 Spices Family Pack -->
+    <div class="menu-card" data-name="chicken dum 21 spices family pack">
+      <div class="menu-card-img">👨‍👩‍👦</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Chicken Dum 21 Spices — FAMILY PACK</div>
+          <div class="item-desc">1 Kg Only — Perfect for family gatherings</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price" id="price-4">₹549 <small>1kg</small></div>
+          <div class="qty-control" id="qc-4">
+            <button class="add-btn" onclick="addItem('Dum 21 Spices Family Pack','4')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chicken Popcorn Biryani -->
+    <div class="menu-card" data-name="chicken popcorn biryani">
+      <div class="menu-card-img">🍿</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag tag-new">✨ NEW</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">Chicken Popcorn Biryani</div>
+          <div class="item-desc">Crispy popcorn chicken, unique twist on classic biryani</div>
+          <div class="variant-row" id="vr-5">
+            <button class="vbtn sel" onclick="selectVariant('5','Half',249,this)">Half ₹249</button>
+            <button class="vbtn" onclick="selectVariant('5','Full',299,this)">Full ₹299</button>
+            <button class="vbtn" onclick="selectVariant('5','1kg',599,this)">1kg ₹599</button>
+          </div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price" id="price-5">₹249</div>
+          <div class="qty-control" id="qc-5">
+            <button class="add-btn" onclick="addItem('Chicken Popcorn Biryani','5')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Chicken Biryani -->
+    <div class="menu-card" data-name="mini chicken biryani solo">
+      <div class="menu-card-img">🥣</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag" style="background:rgba(255,165,0,0.2); color: orange;">SOLO</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">Mini Chicken Biryani — SOLO</div>
+          <div class="item-desc">Perfect single-serve biryani for solo cravings</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price" id="price-6">₹139</div>
+          <div class="qty-control" id="qc-6">
+            <button class="add-btn" onclick="addItem('Mini Chicken Biryani','6')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== STARTERS ========== -->
+  <div class="menu-section" id="starters">
+    <div class="menu-section-title">🍗 Royal Starters</div>
+
+    <div class="menu-card" data-name="crispy lollipop">
+      <div class="menu-card-img">🍗</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Crispy Lollipop</div>
+          <div class="item-desc">4 pcs — Golden crispy, perfectly fried</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹189</div>
+          <button class="add-btn" onclick="addItem('Crispy Lollipop (4pcs)','s1',189)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="hot lollipop">
+      <div class="menu-card-img">🌶️</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Hot Lollipop</div>
+          <div class="item-desc">4 pcs — Fiery hot glaze</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹189</div>
+          <button class="add-btn" onclick="addItem('Hot Lollipop (4pcs)','s2',189)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="chicken wings">
+      <div class="menu-card-img">🍖</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Chicken Wings</div>
+          <div class="item-desc">5 pcs — Classic marinated</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹189</div>
+          <button class="add-btn" onclick="addItem('Chicken Wings (5pcs)','s3',189)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="crispy wings">
+      <div class="menu-card-img">✨</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Crispy Wings</div>
+          <div class="item-desc">5 pcs — Extra crispy batter</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹189</div>
+          <button class="add-btn" onclick="addItem('Crispy Wings (5pcs)','s4',189)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="chicken popcorn">
+      <div class="menu-card-img">🍿</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Chicken Popcorn</div>
+          <div class="item-desc">20-22 pcs — Bite sized, super crispy</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹219</div>
+          <button class="add-btn" onclick="addItem('Chicken Popcorn (20-22pcs)','s5',219)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="chicken tikka fry">
+      <div class="menu-card-img">🥩</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-name">Chicken Tikka Fry</div>
+          <div class="item-desc">8 pcs — Smoky charred, restaurant style</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹239</div>
+          <button class="add-btn" onclick="addItem('Chicken Tikka Fry (8pcs)','s6',239)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== COMBOS ========== -->
+  <div class="menu-section" id="combos">
+    <div class="menu-section-title">🎉 Royal Combos</div>
+
+    <div class="menu-card" data-name="all in one combo">
+      <div class="menu-card-img">🎊</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag tag-bestseller">⭐ BEST VALUE</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">All in One Combo</div>
+          <div class="item-desc">Biryani + Tikka (2pcs) + Crispy Lollipop (2pcs) + Crispy Wings (2pcs) + Popcorn (12-15pcs) + Cold Drink</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹649</div>
+          <button class="add-btn" onclick="addItem('All in One Combo','c1',649)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="biryani combo">
+      <div class="menu-card-img">🍱</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag" style="background:rgba(46,213,115,0.2); color:#2ed573;">SAVE ₹50</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">Biryani Combo</div>
+          <div class="item-desc">Chicken Dum Biryani + 3 Crispy Lollipop + 3 Tikka Fry + Cold Drink (250ml) + Mint Raita</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹399 <small style="text-decoration:line-through; color:var(--text-muted);">₹449</small></div>
+          <button class="add-btn" onclick="addItem('Biryani Combo','c2',399)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card" data-name="full biryani tikka hot spicy">
+      <div class="menu-card-img">🔥</div>
+      <div class="menu-card-body">
+        <div>
+          <div class="item-tags">
+            <span class="tag" style="background:rgba(46,213,115,0.2); color:#2ed573;">SAVE ₹40</span>
+          </div>
+          <div class="item-name" style="margin-top: 4px;">Full Biryani + Tikka Hot Spicy</div>
+          <div class="item-desc">Chicken Biryani (Full) + 4 Tikka Hot Spicy Fry + Mint Raita + Garlic Raita + Sauce</div>
+        </div>
+        <div class="item-bottom">
+          <div class="item-price">₹349 <small style="text-decoration:line-through; color:var(--text-muted);">₹389</small></div>
+          <button class="add-btn" onclick="addItem('Full Biryani + Tikka Hot Spicy','c3',349)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer-20"></div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a class="nav-item active" href="menu.html"><span class="nav-icon">📜</span><span>Menu</span></a>
+    <a class="nav-item" href="offers.html"><span class="nav-icon">🎁</span><span>Offers</span></a>
+    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+  </nav>
+</div>
+
+<!-- Cart Strip -->
+<div class="cart-strip" id="cart-strip" onclick="openCart()">
+  <span id="cart-label">🛒 0 items</span>
+  <div class="cart-right">
+    <span id="cart-total-label">₹0</span>
+    <div class="cart-count" id="cart-count">0</div>
+    <span>→</span>
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="cart-modal-overlay" id="cart-overlay" onclick="closeCartOutside(event)">
+  <div class="cart-modal">
+    <button class="close-cart" onclick="closeCart()">✕</button>
+    <div class="cart-modal-title">Your Order 🛒</div>
+    <div id="cart-items-list"></div>
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="modal-total" style="color: var(--gold);">₹0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Place Order on WhatsApp 📱</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =========== CART ===========
+let cart = [];
+let variants = {
+  '1': { name: 'Half', price: 169 },
+  '2': { name: 'Half', price: 199 },
+  '3': { name: 'Half', price: 199 },
+  '5': { name: 'Half', price: 249 },
+};
+const staticPrices = {
+  '4': 549, '6': 139,
+  's1': 189, 's2': 189, 's3': 189, 's4': 189, 's5': 219, 's6': 239,
+  'c1': 649, 'c2': 399, 'c3': 349
+};
+
+function selectVariant(id, name, price, btn) {
+  variants[id] = { name, price };
+  document.getElementById('price-' + id).textContent = '₹' + price;
+  document.querySelectorAll('#vr-' + id + ' .vbtn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function addItem(name, id, customPrice) {
+  const price = customPrice || (variants[id] ? variants[id].price : staticPrices[id]);
+  const variantName = variants[id] ? variants[id].name : '';
+  const fullName = variantName ? name + ' (' + variantName + ')' : name;
+  
+  const existing = cart.find(i => i.name === fullName);
+  if (existing) { existing.qty++; existing.total += price; }
+  else { cart.push({ name: fullName, price, qty: 1, total: price }); }
+  
+  updateCartUI();
+  showToast(name + ' added! 🍛');
+}
+
+function updateCartUI() {
+  const count = cart.reduce((a, i) => a + i.qty, 0);
+  const total = cart.reduce((a, i) => a + i.total, 0);
+  const strip = document.getElementById('cart-strip');
+  
+  if (count > 0) {
+    strip.style.display = 'flex';
+    document.getElementById('cart-label').textContent = '🛒 ' + count + ' item' + (count > 1 ? 's' : '');
+    document.getElementById('cart-total-label').textContent = '₹' + total;
+    document.getElementById('cart-count').textContent = count;
+    document.getElementById('modal-total').textContent = '₹' + total;
+  } else {
+    strip.style.display = 'none';
+  }
+  
+  // Update modal list
+  const list = document.getElementById('cart-items-list');
+  list.innerHTML = cart.map(i => `
+    <div class="cart-row">
+      <span class="cart-row-name">${i.name}</span>
+      <span class="cart-row-qty">×${i.qty}</span>
+      <span class="cart-row-price">₹${i.total}</span>
+      <button onclick="removeItem('${i.name}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;margin-left:8px;">✕</button>
+    </div>
+  `).join('') || '<p style="color:var(--text-muted);text-align:center;padding:20px;">Cart is empty</p>';
+}
+
+function removeItem(name) {
+  cart = cart.filter(i => i.name !== name);
+  updateCartUI();
+}
+
+function openCart() { document.getElementById('cart-overlay').classList.add('open'); }
+function closeCart() { document.getElementById('cart-overlay').classList.remove('open'); }
+function closeCartOutside(e) { if (e.target === document.getElementById('cart-overlay')) closeCart(); }
+
+function checkout() {
+  if (cart.length === 0) return;
+  const total = cart.reduce((a, i) => a + i.total, 0);
+  const itemsList = cart.map(i => `${i.name} ×${i.qty} = ₹${i.total}`).join('%0A');
+  const msg = `🍛 *The Biryani Box Order*%0A%0A${itemsList}%0A%0A*Total: ₹${total}*%0A%0APlease confirm my order!`;
+  window.open('https://wa.me/91XXXXXXXXXX?text=' + msg, '_blank');
+}
+
+function filterMenu() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  document.querySelectorAll('.menu-card').forEach(card => {
+    const name = card.getAttribute('data-name') || '';
+    card.style.display = name.includes(q) ? 'flex' : 'none';
+  });
+}
+
+function scrollTo(id, el) {
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// AI recs rotation
+const recs = [
+  'Aaj <b>Chicken Tikka 21 Spices</b> try karo — Chef\'s Special! ₹249',
+  'Weekend special: <b>All in One Combo ₹649</b> — best value deal!',
+  'Naya item: <b>Chicken Popcorn Biryani</b> — unique twist! ₹249',
+  '<b>Biryani Combo ₹399</b> — save ₹50 today!'
+];
+document.getElementById('ai-menu-rec').innerHTML = recs[Math.floor(Math.random() * recs.length)];
+</script>
 </body>
 </html>
-
