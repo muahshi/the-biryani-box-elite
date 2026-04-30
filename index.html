@@ -1,30 +1,130 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome | The Biryani Box Elite</title>
-    <link rel="stylesheet" href="public/style.css">
-    <style>
-        .login-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 90vh; text-align: center; }
-        .login-card { background: rgba(22, 27, 22, 0.9); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); width: 85%; }
-        input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px; border: 1px solid var(--gold); background: transparent; color: #fff; font-size: 16px; box-sizing: border-box; }
-        .btn-full { width: 100%; background: var(--gold); color: var(--primary); padding: 15px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Biryani Box | Elite Club</title>
+  <link rel="stylesheet" href="public/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .app { background: radial-gradient(ellipse at 50% 0%, #1a4a1a 0%, #071f0a 50%, #020d03 100%); }
+    .ornament { color: var(--gold); font-size: 22px; letter-spacing: 8px; opacity: 0.5; margin: 8px 0; }
+    .phone-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; }
+    .phone-wrap { position: relative; }
+    .phone-wrap .phone-input { padding-left: 50px; }
+    .step-1 {}
+    .step-2 { display: none; }
+    .otp-hint { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 14px; }
+    .otp-hint span { color: var(--gold); font-weight: 600; }
+    .resend-link { color: var(--gold); font-size: 12px; text-align: center; cursor: pointer; display: block; margin-top: 10px; }
+    .back-link { color: var(--text-muted); font-size: 12px; text-align: center; cursor: pointer; display: block; margin-bottom: 14px; }
+    .perks { display: flex; justify-content: space-around; margin: 20px 0; }
+    .perk { text-align: center; }
+    .perk-icon { font-size: 22px; margin-bottom: 4px; }
+    .perk-text { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+  </style>
 </head>
 <body>
-    <div class="mobile-frame">
-        <div class="login-container">
-            <img src="public/logo.png" width="120" style="margin-bottom: 20px;">
-            <div class="login-card">
-                <h2 style="color: var(--gold); margin-bottom: 5px;">The Elite Club</h2>
-                <p style="font-size: 13px; color: #ccc;">Exclusive swad aur rewards ki duniya mein aapka swagat hai.</p>
-                <input type="tel" placeholder="Enter Mobile Number (+91)" maxlength="10">
-                <button class="btn-full" onclick="location.href='dashboard.html'">GET OTP / LOGIN</button>
-            </div>
-            <p style="margin-top: 30px; font-size: 11px; color: #666;">By continuing, you agree to our Terms & Conditions</p>
-        </div>
+<div class="app">
+  <div class="login-wrap page-fade">
+    
+    <div class="login-logo-box">
+      <div class="ornament">✦ ✦ ✦</div>
+      <div class="login-logo-text">The Biryani<br>Box</div>
+      <div class="login-logo-sub">Bhopal's Royal Kitchen</div>
+      <div class="ornament">✦ ✦ ✦</div>
     </div>
+
+    <div class="login-club-badge">✨ The Elite Club</div>
+    <p class="login-tagline">Start your royal biryani journey.<br>Special surprises daily!</p>
+
+    <div class="login-card">
+
+      <!-- Step 1: Phone -->
+      <div class="step-1" id="step1">
+        <div class="phone-wrap">
+          <span class="phone-prefix">🇮🇳 +91</span>
+          <input class="phone-input" type="tel" id="phone-input" placeholder="Mobile Number" maxlength="10">
+        </div>
+        <button class="otp-btn" onclick="sendOTP()">GET OTP / LOGIN</button>
+      </div>
+
+      <!-- Step 2: OTP -->
+      <div class="step-2" id="step2">
+        <p class="otp-hint">OTP sent to +91 <span id="otp-phone"></span></p>
+        <div class="otp-row" id="otp-row">
+          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,1)">
+          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,2)">
+          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,3)">
+          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,4)">
+        </div>
+        <button class="otp-btn" onclick="verifyOTP()">VERIFY & ENTER</button>
+        <span class="resend-link" onclick="resendOTP()">OTP nahi aaya? Resend karein</span>
+        <span class="back-link" onclick="goBack()">← Change Number</span>
+      </div>
+
+    </div>
+
+    <div class="perks">
+      <div class="perk"><div class="perk-icon">🏅</div><div class="perk-text">Gold Card<br>Rewards</div></div>
+      <div class="perk"><div class="perk-icon">🤖</div><div class="perk-text">AI<br>Suggestions</div></div>
+      <div class="perk"><div class="perk-icon">🎁</div><div class="perk-text">Exclusive<br>Offers</div></div>
+      <div class="perk"><div class="perk-icon">🌟</div><div class="perk-text">Elite<br>Surprises</div></div>
+    </div>
+
+    <p class="login-note">By continuing, you agree to our Terms & Privacy Policy</p>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function sendOTP() {
+  const ph = document.getElementById('phone-input').value.trim();
+  if (ph.length < 10) { showToast('Valid 10-digit number daalo'); return; }
+  document.getElementById('otp-phone').textContent = ph;
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  showToast('OTP sent! (Demo: enter 1234)');
+  localStorage.setItem('bb_phone', '+91' + ph);
+}
+
+function otpMove(el, idx) {
+  el.value = el.value.slice(0,1);
+  const inputs = document.querySelectorAll('.otp-input');
+  if (el.value && idx < 4) inputs[idx].focus();
+}
+
+function verifyOTP() {
+  const inputs = document.querySelectorAll('.otp-input');
+  const otp = Array.from(inputs).map(i => i.value).join('');
+  if (otp.length < 4) { showToast('4-digit OTP daalo'); return; }
+  // Demo: any 4 digits work
+  localStorage.setItem('bb_user', JSON.stringify({
+    name: 'Biryani Lover',
+    phone: localStorage.getItem('bb_phone') || '+91XXXXXXXXXX',
+    balance: 120,
+    tier: 'Silver',
+    points: 40
+  }));
+  showToast('Welcome to Elite Club! 🎉');
+  setTimeout(() => location.href = 'dashboard.html', 800);
+}
+
+function resendOTP() { showToast('OTP resent!'); }
+function goBack() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+}
+</script>
 </body>
 </html>
-
