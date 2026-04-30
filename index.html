@@ -12,7 +12,7 @@
     .ornament { color: var(--gold); font-size: 22px; letter-spacing: 8px; opacity: 0.5; margin: 8px 0; }
     .phone-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; }
     .phone-wrap { position: relative; }
-    .phone-wrap .phone-input { padding-left: 50px; }
+    .phone-wrap .phone-input { padding-left: 54px; }
     .step-1 {}
     .step-2 { display: none; }
     .otp-hint { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 14px; }
@@ -28,7 +28,7 @@
 <body>
 <div class="app">
   <div class="login-wrap page-fade">
-    
+
     <div class="login-logo-box">
       <div class="ornament">✦ ✦ ✦</div>
       <div class="login-logo-text">The Biryani<br>Box</div>
@@ -45,7 +45,7 @@
       <div class="step-1" id="step1">
         <div class="phone-wrap">
           <span class="phone-prefix">🇮🇳 +91</span>
-          <input class="phone-input" type="tel" id="phone-input" placeholder="Mobile Number" maxlength="10">
+          <input class="phone-input" type="tel" inputmode="numeric" id="phone-input" placeholder="Mobile Number" maxlength="10">
         </div>
         <button class="otp-btn" onclick="sendOTP()">GET OTP / LOGIN</button>
       </div>
@@ -53,12 +53,14 @@
       <!-- Step 2: OTP -->
       <div class="step-2" id="step2">
         <p class="otp-hint">OTP sent to +91 <span id="otp-phone"></span></p>
+
         <div class="otp-row" id="otp-row">
-          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,1)">
-          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,2)">
-          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,3)">
-          <input class="otp-input" type="number" maxlength="1" oninput="otpMove(this,4)">
+          <input class="otp-input" type="tel" inputmode="numeric" autocomplete="one-time-code" maxlength="1" data-idx="0">
+          <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" data-idx="1">
+          <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" data-idx="2">
+          <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" data-idx="3">
         </div>
+
         <button class="otp-btn" onclick="verifyOTP()">VERIFY & ENTER</button>
         <span class="resend-link" onclick="resendOTP()">OTP nahi aaya? Resend karein</span>
         <span class="back-link" onclick="goBack()">← Change Number</span>
@@ -91,24 +93,58 @@ function showToast(msg) {
 function sendOTP() {
   const ph = document.getElementById('phone-input').value.trim();
   if (ph.length < 10) { showToast('Valid 10-digit number daalo'); return; }
+
   document.getElementById('otp-phone').textContent = ph;
   document.getElementById('step1').style.display = 'none';
   document.getElementById('step2').style.display = 'block';
+
   showToast('OTP sent! (Demo: enter 1234)');
   localStorage.setItem('bb_phone', '+91' + ph);
+
+  setTimeout(() => {
+    const first = document.querySelector('.otp-input');
+    if (first) first.focus();
+  }, 50);
 }
 
-function otpMove(el, idx) {
-  el.value = el.value.slice(0,1);
-  const inputs = document.querySelectorAll('.otp-input');
-  if (el.value && idx < 4) inputs[idx].focus();
-}
+// ✅ Robust OTP behavior for mobile (Android Chrome fix)
+(function initOtpInputs(){
+  const inputs = Array.from(document.querySelectorAll('.otp-input'));
+  if (!inputs.length) return;
+
+  inputs.forEach((inp, i) => {
+    inp.addEventListener('input', () => {
+      inp.value = (inp.value || '').replace(/\D/g,'').slice(0,1);
+      if (inp.value && i < inputs.length - 1) inputs[i+1].focus();
+    });
+
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !inp.value && i > 0) {
+        inputs[i-1].focus();
+      }
+      if (e.key === 'Enter') verifyOTP();
+    });
+
+    inp.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text');
+      const digits = (text || '').replace(/\D/g,'').slice(0,4).split('');
+      digits.forEach((d, idx) => { if (inputs[idx]) inputs[idx].value = d; });
+      const lastFilled = Math.min(digits.length, inputs.length) - 1;
+      if (lastFilled >= 0 && inputs[lastFilled]) inputs[lastFilled].focus();
+    });
+  });
+})();
 
 function verifyOTP() {
   const inputs = document.querySelectorAll('.otp-input');
   const otp = Array.from(inputs).map(i => i.value).join('');
+
   if (otp.length < 4) { showToast('4-digit OTP daalo'); return; }
-  // Demo: any 4 digits work
+
+  // ✅ Demo strict OTP: only 1234
+  if (otp !== '1234') { showToast('Wrong OTP (Demo OTP: 1234)'); return; }
+
   localStorage.setItem('bb_user', JSON.stringify({
     name: 'Biryani Lover',
     phone: localStorage.getItem('bb_phone') || '+91XXXXXXXXXX',
@@ -116,14 +152,19 @@ function verifyOTP() {
     tier: 'Silver',
     points: 40
   }));
+
   showToast('Welcome to Elite Club! 🎉');
-  setTimeout(() => location.href = 'dashboard.html', 800);
+  setTimeout(() => location.href = 'dashboard.html', 500);
 }
 
-function resendOTP() { showToast('OTP resent!'); }
+function resendOTP() { showToast('OTP resent! (Demo: 1234)'); }
+
 function goBack() {
   document.getElementById('step2').style.display = 'none';
   document.getElementById('step1').style.display = 'block';
+
+  // clear otp boxes
+  document.querySelectorAll('.otp-input').forEach(i => i.value = '');
 }
 </script>
 </body>
