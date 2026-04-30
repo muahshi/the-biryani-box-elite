@@ -2,99 +2,263 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Elite Offers | The Biryani Box</title>
   <link rel="stylesheet" href="public/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── HERO SECTION ── */
+    .hero-section {
+      margin: 0 20px 20px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #1a4a1a 0%, #0d2e10 50%, #071a08 100%);
+      border: 1.5px solid rgba(197,160,89,0.45);
+      padding: 24px 22px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 130px; height: 130px;
+      background: radial-gradient(circle, rgba(197,160,89,0.18) 0%, transparent 70%);
+    }
+
+    /* ── LOGO — FIXED SIZE ── */
+    .hero-logo-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid rgba(197,160,89,0.5);
+      box-shadow: 0 0 20px rgba(197,160,89,0.25);
+      margin: 0 auto 12px;
+      display: block;
+    }
+    .hero-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; font-weight: 700; color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .hero-tagline {
+      font-size: 12px; color: var(--text-muted);
+      letter-spacing: 0.5px; margin-bottom: 0;
+    }
+
+    /* ── OFFER CARDS ── */
+    .offer-card .offer-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 700; color: var(--gold);
+    }
+    .activate-btn {
+      width: 100%; background: var(--gold); color: var(--primary);
+      border: none; padding: 14px; border-radius: 12px;
+      font-weight: 700; font-size: 15px; cursor: pointer;
+      margin-top: 16px; letter-spacing: 0.5px; transition: opacity 0.2s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .activate-btn:hover { opacity: 0.9; }
+
+    /* ── DEAL GRID ── */
+    .deals-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; padding: 0 20px; margin-bottom: 16px;
+    }
+    .deal-card {
+      background: var(--dark-card); border: 1px solid #1e2e1e;
+      border-radius: 16px; padding: 16px 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .deal-card:hover { border-color: var(--border-gold); transform: translateY(-2px); }
+    .deal-card.gold { border-color: rgba(197,160,89,0.4); background: rgba(197,160,89,0.07); }
+    .deal-icon { font-size: 28px; margin-bottom: 8px; }
+    .deal-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .deal-desc { font-size: 11px; color: var(--text-muted); line-height: 1.45; }
+    .deal-highlight { color: var(--gold); font-weight: 700; }
+
+    /* ── REFER ── */
+    .refer-card {
+      margin: 0 20px 20px;
+      background: linear-gradient(135deg, rgba(50,200,80,0.08), rgba(12,40,16,0.7));
+      border: 1.5px solid rgba(50,200,80,0.3);
+      border-radius: 20px; padding: 20px;
+      position: relative; overflow: hidden;
+    }
+    .refer-card::after { content: '👫'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 44px; opacity: 0.1; }
+    .refer-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 0.15em; color: #50e050; text-transform: uppercase; margin-bottom: 6px; }
+    .refer-title { font-size: 19px; font-weight: 800; margin-bottom: 5px; }
+    .refer-title span { color: #50e050; }
+    .refer-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
+    .refer-code-box {
+      background: rgba(0,0,0,0.3); border: 1.5px dashed rgba(50,200,80,0.35);
+      border-radius: 12px; padding: 12px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .refer-code { font-size: 20px; font-weight: 800; letter-spacing: 0.12em; color: #50e050; }
+    .refer-copy-btn {
+      background: rgba(50,200,80,0.12); border: 1px solid rgba(50,200,80,0.3);
+      color: #50e050; font-family: 'Poppins', sans-serif; font-size: 11.5px; font-weight: 700;
+      padding: 7px 14px; border-radius: 20px; cursor: pointer; transition: all 0.2s;
+    }
+    .refer-copy-btn:hover { background: rgba(50,200,80,0.22); }
+  </style>
 </head>
 <body>
-  <div class="app page-fade">
+<div class="app page-fade">
 
-    <div class="top-header">
-      <div class="brand-name">The Biryani Box</div>
-      <div class="notif-btn" onclick="location.href='dashboard.html'">🏠</div>
-    </div>
-
-    <!-- HERO VIDEO (optional) -->
-    <div class="hero-video-card">
-      <video class="hero-video" autoplay muted loop playsinline>
-        <source src="public/biryani.mp4" type="video/mp4" />
-      </video>
-      <div class="hero-overlay">
-        <div class="hero-logo">
-          <img src="public/logo.png" alt="logo" />
-        </div>
-        <div class="hero-title">Elite Offers</div>
-        <div class="hero-sub">Daily surprises • Royal savings</div>
-      </div>
-    </div>
-
-    <div class="section-title">Choose Your Plan</div>
-
-    <div class="offer-card">
-      <div class="offer-title">Silver</div>
-      <div class="offer-price">₹0 / Free • Basic Elite Rewards</div>
-      <ul class="offer-features">
-        <li><span class="feature-icon">✅</span> 5% Cashback Wallet</li>
-        <li><span class="feature-icon">✅</span> 1 Daily Surprise Deal</li>
-        <li><span class="feature-icon">✅</span> Basic AI Meal Suggestion</li>
-      </ul>
-      <button class="activate-btn" onclick="setPlan('Silver')">Activate Silver</button>
-    </div>
-
-    <div class="offer-card pro">
-      <div class="offer-title">Gold</div>
-      <div class="offer-price">₹199 / month • Most Popular</div>
-      <ul class="offer-features">
-        <li><span class="feature-icon">🔥</span> 10% Cashback Wallet</li>
-        <li><span class="feature-icon">🔥</span> Priority Delivery Slot</li>
-        <li><span class="feature-icon">🔥</span> AI Personalized Combo Builder</li>
-        <li><span class="feature-icon">🔥</span> 2 Surprise Coupons / Day</li>
-      </ul>
-      <button class="activate-btn" onclick="setPlan('Gold')">Activate Gold</button>
-    </div>
-
-    <div class="offer-card">
-      <div class="offer-title">Royal</div>
-      <div class="offer-price">₹499 / month • VIP</div>
-      <ul class="offer-features">
-        <li><span class="feature-icon">👑</span> 15% Cashback Wallet</li>
-        <li><span class="feature-icon">👑</span> Free Dessert (weekly)</li>
-        <li><span class="feature-icon">👑</span> AI Diet Mode (Spicy / Light / Protein)</li>
-        <li><span class="feature-icon">👑</span> Early Access to New Menu</li>
-      </ul>
-      <button class="activate-btn" onclick="setPlan('Royal')">Activate Royal</button>
-    </div>
-
-    <div class="spacer-20"></div>
-
-    <div class="bottom-nav">
-      <a class="nav-item" href="dashboard.html"><div class="nav-icon">🏠</div>Home</a>
-      <a class="nav-item" href="menu.html"><div class="nav-icon">🍽️</div>Menu</a>
-      <a class="nav-item active" href="offers.html"><div class="nav-icon">🎁</div>Offers</a>
-      <a class="nav-item" href="profile.html"><div class="nav-icon">👤</div>Profile</a>
-    </div>
-
+  <!-- Header -->
+  <div class="top-header">
+    <div class="brand-name">The Biryani Box</div>
+    <div class="notif-btn" onclick="location.href='dashboard.html'">🏠</div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <!-- Hero with fixed logo -->
+  <div class="hero-section">
+    <img
+      src="public/logo.png"
+      alt="The Biryani Box Logo"
+      class="hero-logo-img"
+      onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'"
+    />
+    <div id="logo-fallback" style="display:none;font-size:50px;margin-bottom:10px">🍛</div>
+    <div class="hero-brand">The Biryani Box</div>
+    <div class="hero-tagline">Daily surprises · Royal savings · Elite Rewards</div>
+  </div>
 
-  <script>
-    function showToast(msg){
-      const t=document.getElementById('toast');
-      t.textContent=msg;
-      t.classList.add('show');
-      setTimeout(()=>t.classList.remove('show'),2400);
-    }
+  <!-- Live Deals -->
+  <div class="section-title">🔥 Aaj Ki Hot Deals</div>
+  <div class="deals-grid">
+    <div class="deal-card gold">
+      <div class="deal-icon">🚚</div>
+      <div class="deal-title">FREE Delivery</div>
+      <div class="deal-desc">Aaj <span class="deal-highlight">har order</span> pe free — koi minimum nahi!</div>
+    </div>
+    <div class="deal-card">
+      <div class="deal-icon">🍗</div>
+      <div class="deal-title">10% OFF Biryani</div>
+      <div class="deal-desc">Chicken Biryani pe <span class="deal-highlight">10% off</span> milega aaj</div>
+    </div>
+    <div class="deal-card">
+      <div class="deal-icon">⭐</div>
+      <div class="deal-title">Review = ₹5</div>
+      <div class="deal-desc">Google review do → <span class="deal-highlight">₹5</span> wallet mein</div>
+    </div>
+    <div class="deal-card">
+      <div class="deal-icon">🎂</div>
+      <div class="deal-title">Birthday Gift</div>
+      <div class="deal-desc">Register karo → <span class="deal-highlight">surprise gift</span></div>
+    </div>
+    <div class="deal-card gold">
+      <div class="deal-icon">🍿</div>
+      <div class="deal-title">FREE Starter</div>
+      <div class="deal-desc">₹400+ order pe <span class="deal-highlight">Lollipop free</span>!</div>
+    </div>
+    <div class="deal-card">
+      <div class="deal-icon">⏰</div>
+      <div class="deal-title">Happy Hours</div>
+      <div class="deal-desc">2–5 PM: <span class="deal-highlight">15% extra off</span> sabhi orders</div>
+    </div>
+  </div>
 
-    function setPlan(plan){
-      const raw = localStorage.getItem('bb_user');
-      if(!raw){ location.href='index.html'; return; }
-      const user = JSON.parse(raw);
-      user.tier = plan;
-      localStorage.setItem('bb_user', JSON.stringify(user));
-      showToast(plan + " plan activated ✅");
-      setTimeout(()=>location.href='dashboard.html',600);
-    }
-  </script>
+  <!-- Refer & Earn -->
+  <div class="section-title">👫 Refer & Earn</div>
+  <div class="refer-card">
+    <div class="refer-tag">💚 Double Earning</div>
+    <div class="refer-title">Dost ko bulao <span>₹50</span> kamao!</div>
+    <div class="refer-desc">Dost pehli baar order kare — aapko <strong style="color:#50e050">₹50</strong> aur unhe <strong>₹30</strong> wallet mein. Dono khush!</div>
+    <div class="refer-code-box">
+      <span class="refer-code">BIRYANI50</span>
+      <button class="refer-copy-btn" onclick="copyCode()">📋 Copy</button>
+    </div>
+    <button class="activate-btn" style="background:linear-gradient(135deg,#1a7a3a,#2aa55a);color:white;" onclick="shareReferral()">
+      📤 Referral Link Share Karo
+    </button>
+  </div>
+
+  <!-- Subscription Plans -->
+  <div class="section-title">👑 Elite Subscription</div>
+
+  <div class="offer-card">
+    <div class="offer-title">Silver</div>
+    <div class="offer-price">₹0 / Free · Basic Elite Rewards</div>
+    <ul class="offer-features">
+      <li><span class="feature-icon">✅</span> 5% Cashback Wallet</li>
+      <li><span class="feature-icon">✅</span> 1 Daily Surprise Deal</li>
+      <li><span class="feature-icon">✅</span> Basic AI Meal Suggestion</li>
+    </ul>
+    <button class="activate-btn" onclick="setPlan('Silver')">Activate Silver</button>
+  </div>
+
+  <div class="offer-card pro">
+    <div class="offer-title">Gold</div>
+    <div class="offer-price">₹199 / month · Most Popular</div>
+    <ul class="offer-features">
+      <li><span class="feature-icon">🔥</span> 10% Cashback Wallet</li>
+      <li><span class="feature-icon">🔥</span> Priority Delivery Slot</li>
+      <li><span class="feature-icon">🔥</span> AI Personalized Combo Builder</li>
+      <li><span class="feature-icon">🔥</span> 2 Surprise Coupons / Day</li>
+      <li><span class="feature-icon">🔥</span> Birthday Special Gift</li>
+    </ul>
+    <button class="activate-btn" onclick="setPlan('Gold')">Activate Gold — ₹199/mo</button>
+  </div>
+
+  <div class="offer-card">
+    <div class="offer-title">Royal</div>
+    <div class="offer-price">₹499 / month · VIP</div>
+    <ul class="offer-features">
+      <li><span class="feature-icon">👑</span> 15% Cashback Wallet</li>
+      <li><span class="feature-icon">👑</span> Free Dessert (weekly)</li>
+      <li><span class="feature-icon">👑</span> AI Diet Mode (Spicy / Light / Protein)</li>
+      <li><span class="feature-icon">👑</span> Early Access to New Menu</li>
+      <li><span class="feature-icon">👑</span> Dedicated WhatsApp Support</li>
+    </ul>
+    <button class="activate-btn" onclick="setPlan('Royal')">Activate Royal — ₹499/mo</button>
+  </div>
+
+  <div class="spacer-20"></div>
+
+  <nav class="bottom-nav">
+    <a class="nav-item" href="dashboard.html"><div class="nav-icon">🏠</div>Home</a>
+    <a class="nav-item" href="menu.html"><div class="nav-icon">🍽️</div>Menu</a>
+    <a class="nav-item active" href="offers.html"><div class="nav-icon">🎁</div>Offers</a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon">👤</div>Profile</a>
+  </nav>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function setPlan(plan) {
+  const raw = localStorage.getItem('bb_user');
+  if (!raw) { location.href = 'index.html'; return; }
+  const user = JSON.parse(raw);
+  user.tier = plan;
+  localStorage.setItem('bb_user', JSON.stringify(user));
+  showToast(plan + ' plan activated! ✅');
+  setTimeout(() => location.href = 'dashboard.html', 700);
+}
+function copyCode() {
+  navigator.clipboard.writeText('BIRYANI50').then(() => showToast('✅ Referral code copy ho gaya!'));
+}
+function shareReferral() {
+  const url = location.origin + location.pathname.replace('offers.html', 'index.html');
+  const text = '🍛 The Biryani Box Elite Club — Bhopal ka best biryani! 10% off milega tumhe bhi. Download karo: ' + url;
+  if (navigator.share) {
+    navigator.share({ title: 'The Biryani Box', text, url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text);
+    showToast('✅ Referral link copy ho gaya! Kisi ko bhi bhejo.');
+  }
+}
+</script>
 </body>
 </html>
