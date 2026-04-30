@@ -2,27 +2,61 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>The Biryani Box | Elite Club</title>
   <link rel="stylesheet" href="public/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .app { background: radial-gradient(ellipse at 50% 0%, #1a4a1a 0%, #071f0a 50%, #020d03 100%); }
-    .ornament { color: var(--gold); font-size: 22px; letter-spacing: 8px; opacity: 0.5; margin: 8px 0; }
-    .phone-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; }
-    .phone-wrap { position: relative; }
-    .phone-wrap .phone-input { padding-left: 54px; }
-    .step-1 {}
-    .step-2 { display: none; }
-    .otp-hint { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 14px; }
+    .ornament { color: var(--gold); font-size: 20px; letter-spacing: 8px; opacity: 0.5; margin: 8px 0; }
+
+    /* Phone input with prefix */
+    .phone-wrap { position: relative; margin-bottom: 14px; }
+    .phone-prefix {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--gold); font-size: 14px; font-weight: 600; pointer-events: none; z-index: 2;
+    }
+    .phone-wrap .phone-input { padding-left: 58px; margin-bottom: 0; }
+
+    /* Steps */
+    .step { display: none; }
+    .step.visible { display: block; }
+
+    /* OTP row */
+    .otp-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .otp-input {
+      flex: 1; padding: 16px 0; border: 2px solid var(--border-gold);
+      border-radius: 14px; background: rgba(255,255,255,0.06);
+      color: white; font-family: 'Poppins', sans-serif;
+      font-size: 22px; text-align: center; outline: none;
+      transition: border-color 0.2s;
+    }
+    .otp-input:focus { border-color: var(--gold); background: rgba(197,160,89,0.08); }
+    .otp-hint { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 14px; line-height: 1.5; }
     .otp-hint span { color: var(--gold); font-weight: 600; }
-    .resend-link { color: var(--gold); font-size: 12px; text-align: center; cursor: pointer; display: block; margin-top: 10px; }
-    .back-link { color: var(--text-muted); font-size: 12px; text-align: center; cursor: pointer; display: block; margin-bottom: 14px; }
-    .perks { display: flex; justify-content: space-around; margin: 20px 0; }
+    .resend-link { color: var(--gold); font-size: 12px; text-align: center; cursor: pointer; display: block; margin-top: 12px; opacity: 0.8; }
+    .resend-link:hover { opacity: 1; }
+    .back-link { color: var(--text-muted); font-size: 12px; text-align: center; cursor: pointer; display: block; margin-top: 6px; }
+
+    /* Perks */
+    .perks { display: flex; justify-content: space-around; margin: 22px 0 10px; }
     .perk { text-align: center; }
-    .perk-icon { font-size: 22px; margin-bottom: 4px; }
-    .perk-text { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+    .perk-icon { font-size: 24px; margin-bottom: 5px; }
+    .perk-text { font-size: 10px; color: var(--text-muted); line-height: 1.35; }
+
+    /* Loading spinner */
+    .otp-btn.loading { opacity: 0.7; pointer-events: none; }
+    .otp-btn.loading::after { content: '...'; }
+
+    /* Skip demo button */
+    .skip-demo {
+      width: 100%; background: transparent; border: 1px dashed rgba(197,160,89,0.3);
+      color: var(--text-muted); font-family: 'Poppins', sans-serif; font-size: 12px;
+      padding: 10px; border-radius: 10px; cursor: pointer; margin-top: 10px;
+      transition: all 0.2s;
+    }
+    .skip-demo:hover { border-color: var(--gold); color: var(--gold); }
   </style>
 </head>
 <body>
@@ -37,33 +71,36 @@
     </div>
 
     <div class="login-club-badge">✨ The Elite Club</div>
-    <p class="login-tagline">Start your royal biryani journey.<br>Special surprises daily!</p>
+    <p class="login-tagline">Royal biryani ka journey shuru karo.<br>Har din khaas surprises aur rewards!</p>
 
     <div class="login-card">
 
-      <!-- Step 1: Phone -->
-      <div class="step-1" id="step1">
+      <!-- Step 1: Phone number -->
+      <div class="step visible" id="step1">
         <div class="phone-wrap">
           <span class="phone-prefix">🇮🇳 +91</span>
-          <input class="phone-input" type="tel" inputmode="numeric" id="phone-input" placeholder="Mobile Number" maxlength="10">
+          <input class="phone-input" type="tel" inputmode="numeric" id="phone-input"
+            placeholder="Mobile Number" maxlength="10"
+            onkeydown="if(event.key==='Enter')sendOTP()">
         </div>
-        <button class="otp-btn" onclick="sendOTP()">GET OTP / LOGIN</button>
+        <button class="otp-btn" onclick="sendOTP()" id="otp-send-btn">GET OTP / LOGIN</button>
+        <button class="skip-demo" onclick="skipToDemo()">🎯 Demo mein try karo (OTP bypass)</button>
       </div>
 
-      <!-- Step 2: OTP -->
-      <div class="step-2" id="step2">
-        <p class="otp-hint">OTP sent to +91 <span id="otp-phone"></span></p>
-
+      <!-- Step 2: OTP verify -->
+      <div class="step" id="step2">
+        <p class="otp-hint">OTP sent to +91 <span id="otp-phone">XXXXXXXXXX</span><br>
+          <span style="font-size:11px;color:#2ed573;">✅ Demo: koi bhi 4 digit daalo (e.g. 1234)</span>
+        </p>
         <div class="otp-row" id="otp-row">
           <input class="otp-input" type="tel" inputmode="numeric" autocomplete="one-time-code" maxlength="1" data-idx="0">
           <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" data-idx="1">
           <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" data-idx="2">
           <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" data-idx="3">
         </div>
-
-        <button class="otp-btn" onclick="verifyOTP()">VERIFY & ENTER</button>
-        <span class="resend-link" onclick="resendOTP()">OTP nahi aaya? Resend karein</span>
-        <span class="back-link" onclick="goBack()">← Change Number</span>
+        <button class="otp-btn" onclick="verifyOTP()" id="otp-verify-btn">VERIFY & ENTER ✅</button>
+        <span class="resend-link" onclick="resendOTP()">📱 OTP nahi aaya? Resend karein</span>
+        <span class="back-link" onclick="goBack()">← Number change karo</span>
       </div>
 
     </div>
@@ -75,96 +112,141 @@
       <div class="perk"><div class="perk-icon">🌟</div><div class="perk-text">Elite<br>Surprises</div></div>
     </div>
 
-    <p class="login-note">By continuing, you agree to our Terms & Privacy Policy</p>
-
+    <p class="login-note">Aage badhne se aap Terms & Privacy Policy se agree karte hain</p>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+/* ── TOAST ── */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-function sendOTP() {
-  const ph = document.getElementById('phone-input').value.trim();
-  if (ph.length < 10) { showToast('Valid 10-digit number daalo'); return; }
-
-  document.getElementById('otp-phone').textContent = ph;
-  document.getElementById('step1').style.display = 'none';
-  document.getElementById('step2').style.display = 'block';
-
-  showToast('OTP sent! (Demo: enter 1234)');
-  localStorage.setItem('bb_phone', '+91' + ph);
-
-  setTimeout(() => {
-    const first = document.querySelector('.otp-input');
-    if (first) first.focus();
-  }, 50);
-}
-
-// ✅ Robust OTP behavior for mobile (Android Chrome fix)
-(function initOtpInputs(){
+/* ── OTP INPUTS INIT ── */
+(function initOtp() {
   const inputs = Array.from(document.querySelectorAll('.otp-input'));
-  if (!inputs.length) return;
 
   inputs.forEach((inp, i) => {
     inp.addEventListener('input', () => {
-      inp.value = (inp.value || '').replace(/\D/g,'').slice(0,1);
-      if (inp.value && i < inputs.length - 1) inputs[i+1].focus();
+      inp.value = (inp.value || '').replace(/\D/g, '').slice(0, 1);
+      if (inp.value && i < inputs.length - 1) inputs[i + 1].focus();
+      // Auto-verify when all 4 filled
+      const all = inputs.every(x => x.value.length === 1);
+      if (all) setTimeout(verifyOTP, 200);
     });
-
-    inp.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && !inp.value && i > 0) {
-        inputs[i-1].focus();
-      }
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !inp.value && i > 0) inputs[i - 1].focus();
       if (e.key === 'Enter') verifyOTP();
     });
-
-    inp.addEventListener('paste', (e) => {
+    inp.addEventListener('paste', e => {
       e.preventDefault();
-      const text = (e.clipboardData || window.clipboardData).getData('text');
-      const digits = (text || '').replace(/\D/g,'').slice(0,4).split('');
+      const digits = (e.clipboardData || window.clipboardData)
+        .getData('text').replace(/\D/g, '').slice(0, 4).split('');
       digits.forEach((d, idx) => { if (inputs[idx]) inputs[idx].value = d; });
-      const lastFilled = Math.min(digits.length, inputs.length) - 1;
-      if (lastFilled >= 0 && inputs[lastFilled]) inputs[lastFilled].focus();
+      const last = Math.min(digits.length, inputs.length) - 1;
+      if (last >= 0) inputs[last].focus();
+      const all = inputs.every(x => x.value.length === 1);
+      if (all) setTimeout(verifyOTP, 200);
     });
   });
 })();
 
+/* ── SEND OTP ── */
+function sendOTP() {
+  const ph = document.getElementById('phone-input').value.trim();
+  if (ph.length < 10 || !/^\d{10}$/.test(ph)) {
+    showToast('✋ Valid 10-digit number daalo');
+    document.getElementById('phone-input').focus();
+    return;
+  }
+  const btn = document.getElementById('otp-send-btn');
+  btn.textContent = 'Sending...';
+  btn.classList.add('loading');
+
+  localStorage.setItem('bb_phone', '+91' + ph);
+  document.getElementById('otp-phone').textContent = ph;
+
+  setTimeout(() => {
+    btn.textContent = 'GET OTP / LOGIN';
+    btn.classList.remove('loading');
+    // Show step 2
+    document.getElementById('step1').classList.remove('visible');
+    document.getElementById('step2').classList.add('visible');
+    showToast('📲 OTP bhej diya! (Demo: koi bhi 4 digit)');
+    setTimeout(() => {
+      const first = document.querySelector('.otp-input');
+      if (first) first.focus();
+    }, 100);
+  }, 800);
+}
+
+/* ── VERIFY OTP ── */
 function verifyOTP() {
   const inputs = document.querySelectorAll('.otp-input');
   const otp = Array.from(inputs).map(i => i.value).join('');
+  if (otp.length < 4) { showToast('✋ 4-digit OTP daalo'); return; }
 
-  if (otp.length < 4) { showToast('4-digit OTP daalo'); return; }
+  const btn = document.getElementById('otp-verify-btn');
+  btn.textContent = 'Verifying...';
+  btn.classList.add('loading');
 
-  // ✅ Demo strict OTP: only 1234
-  if (otp !== '1234') { showToast('Wrong OTP (Demo OTP: 1234)'); return; }
+  // Demo: any 4 digits accepted
+  setTimeout(() => {
+    const phone = localStorage.getItem('bb_phone') || '+91XXXXXXXXXX';
+    // Derive name from phone (demo)
+    const existingUser = JSON.parse(localStorage.getItem('bb_user') || 'null');
+    const user = existingUser || {
+      name: 'Biryani Lover',
+      phone: phone,
+      balance: 120,
+      tier: 'Silver',
+      points: 40
+    };
+    // Keep existing data, just update phone
+    user.phone = phone;
+    localStorage.setItem('bb_user', JSON.stringify(user));
+    showToast('🎉 Elite Club mein welcome!');
+    setTimeout(() => location.href = 'dashboard.html', 600);
+  }, 700);
+}
 
+/* ── RESEND ── */
+function resendOTP() {
+  // Clear OTP boxes
+  document.querySelectorAll('.otp-input').forEach(i => { i.value = ''; });
+  document.querySelector('.otp-input').focus();
+  showToast('📱 OTP dobara bheja! (Demo: koi bhi 4 digit)');
+}
+
+/* ── BACK ── */
+function goBack() {
+  document.getElementById('step2').classList.remove('visible');
+  document.getElementById('step1').classList.add('visible');
+  document.querySelectorAll('.otp-input').forEach(i => { i.value = ''; });
+}
+
+/* ── SKIP DEMO ── */
+function skipToDemo() {
   localStorage.setItem('bb_user', JSON.stringify({
-    name: 'Biryani Lover',
-    phone: localStorage.getItem('bb_phone') || '+91XXXXXXXXXX',
+    name: 'Mubashir Bhai',
+    phone: '+919585877758',
     balance: 120,
     tier: 'Silver',
     points: 40
   }));
-
-  showToast('Welcome to Elite Club! 🎉');
+  showToast('🎯 Demo mode — Dashboard khul raha hai!');
   setTimeout(() => location.href = 'dashboard.html', 500);
 }
 
-function resendOTP() { showToast('OTP resent! (Demo: 1234)'); }
-
-function goBack() {
-  document.getElementById('step2').style.display = 'none';
-  document.getElementById('step1').style.display = 'block';
-
-  // clear otp boxes
-  document.querySelectorAll('.otp-input').forEach(i => i.value = '');
+/* ── AUTO REDIRECT IF ALREADY LOGGED IN ── */
+if (localStorage.getItem('bb_user')) {
+  // Already logged in — go to dashboard
+  location.href = 'dashboard.html';
 }
 </script>
 </body>
