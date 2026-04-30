@@ -1,77 +1,223 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Dashboard | The Biryani Box</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --gold: #c5a059; --green: #0a2910; --dark: #051408; }
-        body { background-color: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 450px; min-height: 100vh; padding: 20px; box-sizing: border-box; background: linear-gradient(180deg, #0a2910 0%, #051408 100%); padding-bottom: 100px; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .elite-badge { background: var(--gold); color: var(--green); padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); }
-        
-        .welcome-section h2 { color: var(--gold); margin: 20px 0 5px 0; font-size: 24px; }
-        .welcome-section p { margin: 0; opacity: 0.7; font-size: 13px; }
-
-        .wallet-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 25px; padding: 25px; margin-top: 25px; backdrop-filter: blur(10px); position: relative; overflow: hidden; }
-        .wallet-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(197,160,89,0.1) 0%, transparent 70%); }
-        .balance-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
-        .balance-amount { font-size: 40px; font-weight: 700; color: var(--gold); margin: 10px 0; }
-        
-        .mission-box { background: #112b11; border-radius: 20px; padding: 15px; margin-top: 20px; display: flex; align-items: center; justify-content: space-between; border: 1px dashed var(--gold); }
-        .share-btn { background: var(--gold); color: var(--green); border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; }
-
-        .ai-box { background: rgba(197, 160, 89, 0.1); border-left: 4px solid var(--gold); padding: 15px; border-radius: 0 15px 15px 0; margin-top: 25px; }
-        .ai-box b { color: var(--gold); display: block; margin-bottom: 5px; }
-
-        .nav-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(10, 41, 16, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 15px; border-radius: 25px; border: 1px solid rgba(197, 160, 89, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .nav-bar a { color: white; text-decoration: none; font-size: 20px; opacity: 0.6; }
-        .nav-bar a.active { color: var(--gold); opacity: 1; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | The Biryani Box Elite</title>
+  <link rel="stylesheet" href="public/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .greeting-day { font-size: 13px; color: var(--text-muted); }
+    .greeting-name { font-size: 26px; font-weight: 700; color: var(--gold-light); font-family: 'Cormorant Garamond', serif; margin-top: 2px; }
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px; margin-bottom: 16px; }
+    .quick-card {
+      background: var(--dark-card);
+      border: 1px solid #1e2e1e;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      text-decoration: none;
+      color: white;
+      display: block;
+    }
+    .quick-card:active { transform: scale(0.97); }
+    .quick-card:hover { border-color: var(--border-gold); }
+    .quick-icon { font-size: 28px; margin-bottom: 6px; }
+    .quick-label { font-size: 12px; font-weight: 600; }
+    .quick-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(197,160,89,0.1);
+      border: 1px solid var(--border-gold);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .order-history { padding: 0 20px; }
+    .order-item {
+      background: var(--dark-card);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #1e2e1e;
+    }
+    .order-icon { font-size: 28px; }
+    .order-info { flex: 1; }
+    .order-name { font-size: 13px; font-weight: 600; }
+    .order-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .order-price { color: var(--gold); font-weight: 700; font-size: 14px; }
+    .wallet-actions { display: flex; gap: 10px; margin-top: 10px; }
+  </style>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <span style="font-weight: bold; letter-spacing: 1px;">THE BIRYANI BOX</span>
-            <div class="elite-badge">ELITE CLUB</div>
-        </header>
+<div class="app page-fade">
 
-        <div class="welcome-section">
-            <h2 id="greeting">Salam, Mubashir!</h2>
-            <p>Aapka swagat hai Bhopal ki sabse royal kitchen mein.</p>
-        </div>
-
-        <div class="wallet-card">
-            <div class="balance-label">Current Balance</div>
-            <div class="balance-amount">₹120.00</div>
-            <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 10px; margin-top: 15px;">
-                <div style="width: 60%; background: var(--gold); height: 100%; border-radius: 10px; box-shadow: 0 0 10px var(--gold);"></div>
-            </div>
-            <p style="font-size: 11px; margin-top: 10px; opacity: 0.6;">₹80 aur kamao <b>FREE BIRYANI</b> ke liye!</p>
-        </div>
-
-        <div class="mission-box">
-            <div>
-                <b style="font-size: 14px; display: block;">Instant ₹10 Kamaein! 🎁</b>
-                <span style="font-size: 11px; opacity: 0.7;">Story share karein Instagram par</span>
-            </div>
-            <button class="share-btn">SHARE</button>
-        </div>
-
-        <div class="ai-box">
-            <b>🤖 Chef AI Agent:</b>
-            <span id="ai-text" style="font-size: 13px; line-height: 1.5;">Aaj Friday hai! Mubashir, hamari <b>21 Spices Dum Biryani</b> aapke pichle order se match karti hai. Try karein?</span>
-        </div>
-
-        <div class="nav-bar">
-            <a href="#" class="active">🏠</a>
-            <a href="menu.html">📜</a>
-            <a href="#">🎁</a>
-            <a href="#">👤</a>
-        </div>
+  <!-- Header -->
+  <div class="top-header">
+    <div>
+      <div class="greeting-day" id="day-greeting">Salam!</div>
+      <div class="greeting-name" id="user-name">Biryani Lover</div>
     </div>
+    <div class="notif-btn">🔔</div>
+  </div>
+
+  <!-- Tier Badge -->
+  <div style="padding: 0 20px 10px;">
+    <div class="tier-badge">🥈 <span id="tier-label">Silver Member</span></div>
+  </div>
+
+  <!-- Gold Wallet Card -->
+  <div class="gold-card">
+    <div class="card-label">Gold Card · Wallet Balance</div>
+    <div class="balance-amount">₹<span id="balance">120</span></div>
+    <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 12px;">
+      ₹<span id="to-gold">80</span> aur kamao <b style="color:var(--gold);">FREE BIRYANI</b> ke liye!
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="tier-bar" style="width: 60%;"></div>
+    </div>
+    <div class="wallet-actions">
+      <button class="card-btn" onclick="addMoney()">+ Add Money</button>
+      <button class="card-btn" onclick="location.href='offers.html'">View History</button>
+    </div>
+  </div>
+
+  <!-- AI Agent Box -->
+  <div class="ai-box">
+    <div class="ai-label">🤖 Groq AI — Chef's Recommendation</div>
+    <div class="ai-text" id="ai-rec">Loading recommendation...</div>
+  </div>
+
+  <!-- Mission Strip -->
+  <div class="mission-strip">
+    <div class="mission-text">
+      <h4>Instant ₹10 Kamaein! 🎁</h4>
+      <p>Review do aur wallet mein paao</p>
+    </div>
+    <button class="mission-btn" onclick="location.href='review.html'">REVIEW NOW</button>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section-title" style="margin-bottom: 12px;">Quick Actions</div>
+  <div class="quick-actions">
+    <a href="menu.html" class="quick-card">
+      <div class="quick-icon">📜</div>
+      <div class="quick-label">Full Menu</div>
+      <div class="quick-sub">Order karein</div>
+    </a>
+    <a href="offers.html" class="quick-card">
+      <div class="quick-icon">🎁</div>
+      <div class="quick-label">Offers & Rewards</div>
+      <div class="quick-sub">Points redeem karein</div>
+    </a>
+    <a href="review.html" class="quick-card">
+      <div class="quick-icon">⭐</div>
+      <div class="quick-label">Rate & Review</div>
+      <div class="quick-sub">₹10 instant reward</div>
+    </a>
+    <a href="profile.html" class="quick-card">
+      <div class="quick-icon">👤</div>
+      <div class="quick-label">My Profile</div>
+      <div class="quick-sub">Settings & history</div>
+    </a>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class="section-title">Recent Orders</div>
+  <div class="order-history">
+    <div class="order-item">
+      <div class="order-icon">🍛</div>
+      <div class="order-info">
+        <div class="order-name">Chicken Dum Biryani (Full)</div>
+        <div class="order-date">2 din pehle • Delivered</div>
+      </div>
+      <div class="order-price">₹219</div>
+    </div>
+    <div class="order-item">
+      <div class="order-icon">🍗</div>
+      <div class="order-info">
+        <div class="order-name">Crispy Lollipop × 4</div>
+        <div class="order-date">5 din pehle • Delivered</div>
+      </div>
+      <div class="order-price">₹189</div>
+    </div>
+    <div class="order-item">
+      <div class="order-icon">🎉</div>
+      <div class="order-info">
+        <div class="order-name">All in One Combo</div>
+        <div class="order-date">10 din pehle • Delivered</div>
+      </div>
+      <div class="order-price">₹649</div>
+    </div>
+  </div>
+
+  <div class="spacer-20"></div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a class="nav-item active" href="dashboard.html">
+      <span class="nav-icon">🏠</span><span>Home</span>
+    </a>
+    <a class="nav-item" href="menu.html">
+      <span class="nav-icon">📜</span><span>Menu</span>
+    </a>
+    <a class="nav-item" href="offers.html">
+      <span class="nav-icon">🎁</span><span>Offers</span>
+    </a>
+    <a class="nav-item" href="profile.html">
+      <span class="nav-icon">👤</span><span>Profile</span>
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Load user data
+const user = JSON.parse(localStorage.getItem('bb_user') || '{"name":"Biryani Lover","balance":120,"tier":"Silver","points":40}');
+document.getElementById('user-name').textContent = user.name;
+document.getElementById('balance').textContent = user.balance;
+document.getElementById('tier-label').textContent = user.tier + ' Member';
+document.getElementById('to-gold').textContent = 200 - user.balance;
+const barPct = Math.min((user.balance / 200) * 100, 100);
+document.getElementById('tier-bar').style.width = barPct + '%';
+
+// Greeting by time
+const hour = new Date().getHours();
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const dayName = days[new Date().getDay()];
+const hindiDay = { Friday: 'Happy Friday', Saturday: 'Happy Saturday', Sunday: 'Happy Sunday' };
+document.getElementById('day-greeting').textContent = (hindiDay[dayName] || 'Welcome Back') + '! 🌙';
+
+// AI recommendation
+const recs = [
+  'Aaj Friday hai! Hamari <b>21 Spices Dum Biryani</b> perfect weekend choice hai. Sirf ₹249 mein ek royal experience le lo! 🍛',
+  'Aapke pichle order ke hisab se <b>Chicken Tikka 21 Spices</b> aapko zaroor pasand aayega. Chef\'s special sirf ₹249!',
+  'Aaj ek khaas din: <b>Crispy Lollipop + Biryani Combo</b> try karo — ₹399 mein ₹50 save karo! Bohot popular hai aaj. 🎉',
+  '<b>Chicken Popcorn Biryani</b> — naya item hai! Unique twist on classic biryani. Aapke liye perfect lag raha hai, sirf ₹249. 🌟'
+];
+document.getElementById('ai-rec').innerHTML = recs[new Date().getDay() % recs.length];
+
+function addMoney() {
+  showToast('Add Money feature coming soon! 💳');
+}
+</script>
 </body>
 </html>
