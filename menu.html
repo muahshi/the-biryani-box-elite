@@ -2,378 +2,368 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Menu | The Biryani Box</title>
   <link rel="stylesheet" href="public/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .menu-page-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--gold);
+      font-size: 28px; font-weight: 700; color: var(--gold);
       padding: 20px 20px 4px;
     }
     .menu-page-sub { font-size: 12px; color: var(--text-muted); padding: 0 20px 12px; }
+
+    /* Variant buttons */
     .variant-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
     .vbtn {
-      background: rgba(197,160,89,0.12);
-      border: 1px solid var(--border-gold);
-      color: var(--gold);
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 11px;
-      cursor: pointer;
-      transition: all 0.18s;
-      font-weight: 600;
+      background: rgba(197,160,89,0.12); border: 1px solid var(--border-gold);
+      color: var(--gold); padding: 4px 10px; border-radius: 8px;
+      font-size: 11px; cursor: pointer; transition: all 0.18s; font-weight: 600;
     }
     .vbtn:hover, .vbtn.sel { background: var(--gold); color: var(--primary); }
-    .qty-control {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .qty-btn {
-      width: 28px; height: 28px;
-      background: rgba(197,160,89,0.15);
-      border: 1px solid var(--border-gold);
-      border-radius: 8px;
-      color: var(--gold);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700;
-      transition: background 0.15s;
-    }
-    .qty-btn:hover { background: rgba(197,160,89,0.3); }
-    .qty-num { font-size: 14px; font-weight: 700; min-width: 16px; text-align: center; }
+
+    /* Cart strip */
     .cart-strip {
-      position: fixed;
-      bottom: 68px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 390px;
-      width: calc(100% - 40px);
-      background: var(--gold);
-      color: var(--primary);
-      padding: 14px 20px;
-      border-radius: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(197,160,89,0.4);
-      z-index: 99;
-      transition: opacity 0.3s;
+      position: fixed; bottom: 68px; left: 50%; transform: translateX(-50%);
+      max-width: 390px; width: calc(100% - 40px);
+      background: var(--gold); color: var(--primary);
+      padding: 14px 20px; border-radius: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 700; font-size: 14px; cursor: pointer;
+      box-shadow: 0 8px 25px rgba(197,160,89,0.45); z-index: 99;
+      transition: opacity 0.3s; display: none;
     }
     .cart-right { display: flex; align-items: center; gap: 8px; }
     .cart-count {
-      background: var(--primary);
-      color: var(--gold);
-      width: 24px; height: 24px;
-      border-radius: 50%;
+      background: var(--primary); color: var(--gold);
+      width: 26px; height: 26px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 12px; font-weight: 700;
     }
-    .ai-recommend-bar {
-      margin: 0 20px 12px;
-      background: rgba(100,149,237,0.1);
-      border: 1px solid rgba(100,149,237,0.3);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #6495ed;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+
+    /* Cart overlay */
+    .cart-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); z-index: 200;
+      align-items: flex-end; justify-content: center;
     }
-    /* Cart modal */
-    .cart-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 200;
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
-    }
-    .cart-modal-overlay.open { display: flex; }
-    .cart-modal {
-      background: #0e1f0e;
-      border: 1px solid var(--border-gold-strong);
-      border-radius: 24px 24px 0 0;
-      padding: 24px 20px;
-      width: 100%;
-      max-width: 430px;
-      max-height: 75vh;
-      overflow-y: auto;
-      animation: slideUp 0.3s ease;
+    .cart-overlay.open { display: flex; }
+    .cart-sheet {
+      background: linear-gradient(180deg, #0d2e10 0%, #040e05 100%);
+      border: 1px solid rgba(197,160,89,0.3); border-bottom: none;
+      border-radius: 24px 24px 0 0; width: 100%; max-width: 430px;
+      max-height: 80vh; display: flex; flex-direction: column;
+      padding: 0 0 20px; animation: slideUp 0.35s cubic-bezier(.4,0,.2,1);
     }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .cart-modal-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 16px;
+    .cart-handle {
+      width: 40px; height: 4px; background: rgba(197,160,89,0.28);
+      border-radius: 20px; margin: 14px auto 0;
     }
+    .cart-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; border-bottom: 1px solid rgba(197,160,89,0.1);
+    }
+    .cart-header h3 { font-size: 16px; font-weight: 700; color: var(--gold); }
+    .cart-close-btn {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 22px; cursor: pointer; padding: 4px;
+    }
+    .cart-body { flex: 1; overflow-y: auto; padding: 10px 0; }
     .cart-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      font-size: 13px;
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
     }
-    .cart-row-name { flex: 1; }
-    .cart-row-qty { color: var(--text-muted); margin: 0 12px; font-size: 12px; }
-    .cart-row-price { color: var(--gold); font-weight: 700; }
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      padding-top: 14px;
-      font-weight: 700;
-      font-size: 16px;
-    }
+    .cart-row-emoji { font-size: 24px; flex-shrink: 0; width: 40px; height: 40px; background: rgba(0,0,0,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .cart-row-name { flex: 1; font-size: 12.5px; font-weight: 600; }
+    .cart-row-qty { font-size: 12px; color: var(--text-muted); }
+    .cart-row-price { font-size: 13px; font-weight: 700; color: var(--gold); }
+    .cart-remove { background: none; border: none; color: rgba(255,100,100,0.6); cursor: pointer; font-size: 15px; margin-left: 4px; }
+    .cart-footer { padding: 14px 20px 0; border-top: 1px solid rgba(197,160,89,0.1); }
+    .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .cart-total-lbl { font-size: 13px; color: var(--text-muted); }
+    .cart-total-val { font-size: 22px; font-weight: 800; color: var(--gold); }
     .checkout-btn {
-      width: 100%;
-      background: var(--gold);
-      color: var(--primary);
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 14px;
+      width: 100%; background: var(--gold); color: var(--primary);
+      border: none; padding: 16px; border-radius: 14px;
+      font-weight: 800; font-size: 15px; cursor: pointer;
+      letter-spacing: 0.5px; transition: opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .close-cart { float: right; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+    .checkout-btn:hover { opacity: 0.9; }
+
+    /* ── LOCATION MODAL ── */
+    .loc-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85); z-index: 300;
+      align-items: flex-end; justify-content: center;
+    }
+    .loc-overlay.open { display: flex; }
+    .loc-sheet {
+      background: linear-gradient(180deg, #0d2e10 0%, #040e05 100%);
+      border: 1px solid rgba(197,160,89,0.35); border-bottom: none;
+      border-radius: 24px 24px 0 0; width: 100%; max-width: 430px;
+      padding: 0 24px 36px; animation: slideUp 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    .loc-handle { width: 40px; height: 4px; background: rgba(197,160,89,0.28); border-radius: 20px; margin: 14px auto 16px; }
+    .loc-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .loc-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .loc-field { margin-bottom: 14px; }
+    .loc-label { font-size: 11px; font-weight: 600; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+    .loc-input {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(197,160,89,0.3);
+      border-radius: 12px; color: white; font-family: 'Poppins', sans-serif;
+      font-size: 14px; outline: none; transition: border-color 0.2s;
+    }
+    .loc-input:focus { border-color: var(--gold); background: rgba(197,160,89,0.06); }
+    .loc-btn {
+      width: 100%; background: var(--gold); color: var(--primary);
+      border: none; padding: 15px; border-radius: 14px;
+      font-weight: 700; font-size: 14px; cursor: pointer;
+      transition: opacity 0.2s; margin-top: 4px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .loc-btn:hover { opacity: 0.9; }
+    .loc-btn.loading { opacity: 0.6; pointer-events: none; }
+    .loc-status {
+      text-align: center; font-size: 12px; color: var(--text-muted);
+      margin-top: 10px; min-height: 18px; line-height: 1.5;
+    }
+    .loc-status.success { color: #2ed573; }
+    .loc-status.error { color: #ff6b6b; }
+    .loc-or { text-align: center; color: var(--text-muted); font-size: 11px; margin: 12px 0; }
+    .manual-address {
+      width: 100%; padding: 12px 16px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(197,160,89,0.2);
+      border-radius: 12px; color: white; font-family: 'Poppins', sans-serif;
+      font-size: 13px; outline: none; resize: none; min-height: 70px;
+      margin-bottom: 12px;
+    }
+    .manual-address::placeholder { color: var(--text-muted); }
+    .manual-address:focus { border-color: var(--gold); }
+
+    /* Qty controls */
+    .qty-control { display: flex; align-items: center; gap: 8px; }
+    .qty-btn {
+      width: 28px; height: 28px;
+      background: rgba(197,160,89,0.15); border: 1px solid var(--border-gold);
+      border-radius: 8px; color: var(--gold); font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; transition: background 0.15s;
+    }
+    .qty-btn:hover { background: rgba(197,160,89,0.3); }
+    .qty-num { font-size: 14px; font-weight: 700; min-width: 16px; text-align: center; }
+
+    /* AI rec box */
+    .ai-menu-box {
+      margin: 0 20px 14px;
+      background: rgba(197,160,89,0.07); border-left: 3px solid var(--gold);
+      border-radius: 0 14px 14px 0; padding: 12px 16px;
+    }
+    .ai-menu-label { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 600; }
+    .ai-menu-text { font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.85); }
   </style>
 </head>
 <body>
 <div class="app page-fade">
 
-  <div class="menu-page-title">Shahi Menu 👑</div>
-  <div class="menu-page-sub">Fresh ingredients, royal taste — Bhopal ki shaan</div>
+  <!-- Header -->
+  <div class="top-header">
+    <div class="brand-name">The Biryani Box</div>
+    <div class="notif-btn" onclick="openCart()" style="font-size:18px;" id="cart-notif-btn">🛒</div>
+  </div>
+
+  <!-- AI Recommendation -->
+  <div class="ai-menu-box">
+    <div class="ai-menu-label">🤖 AI Recommendation</div>
+    <div class="ai-menu-text" id="ai-menu-rec">Aaj ke liye best pick load ho raha hai...</div>
+  </div>
 
   <!-- Search -->
   <div class="search-bar">
-    <span>🔍</span>
-    <input type="text" placeholder="Search biryani, starters..." id="search-input" oninput="filterMenu()">
+    <span style="font-size:16px">🔍</span>
+    <input type="text" id="search-input" placeholder="Biryani, Starter, Combo dhundho..." oninput="filterMenu()">
   </div>
 
-  <!-- AI Bar -->
-  <div class="ai-recommend-bar">
-    <span>🤖</span>
-    <span id="ai-menu-rec">Aaj <b>Chicken Tikka 21 Spices</b> try karo — Chef's Special! ₹249</span>
-  </div>
-
-  <!-- Category Chips -->
+  <!-- Category chips -->
   <div class="cat-scroll">
-    <div class="cat-chip active" onclick="scrollTo('biryanis', this)">🍛 Royal Biryanis</div>
-    <div class="cat-chip" onclick="scrollTo('starters', this)">🍗 Royal Starters</div>
-    <div class="cat-chip" onclick="scrollTo('combos', this)">🎉 Royal Combos</div>
+    <div class="cat-chip active" onclick="scrollToSection('sec-biryani',this)">🍛 Biryani</div>
+    <div class="cat-chip" onclick="scrollToSection('sec-starters',this)">🍗 Starters</div>
+    <div class="cat-chip" onclick="scrollToSection('sec-combos',this)">🎯 Combos</div>
   </div>
 
-  <!-- ========== BIRYANIS ========== -->
-  <div class="menu-section" id="biryanis">
-    <div class="menu-section-title">🍛 Royal Biryanis</div>
+  <!-- ─── ROYAL BIRYANI ─── -->
+  <div class="menu-section" id="sec-biryani">
+    <div class="menu-section-title">🍛 Royal Biryani</div>
 
-    <!-- Chicken Dum Biryani -->
     <div class="menu-card" data-name="chicken dum biryani">
       <div class="menu-card-img">🍛</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag tag-bestseller">⭐ BESTSELLER</span>
-            <span class="tag tag-ai">🤖 AI Pick</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">Chicken Dum Biryani</div>
-          <div class="item-desc">Slow cooked on dum, tender chicken, fragrant basmati</div>
-          <div class="variant-row" id="vr-1">
-            <button class="vbtn sel" onclick="selectVariant('1','Half',169,this)">Half ₹169</button>
-            <button class="vbtn" onclick="selectVariant('1','Full',219,this)">Full ₹219</button>
-            <button class="vbtn" onclick="selectVariant('1','1kg',469,this)">1kg ₹469</button>
+        <div class="menu-card-top">
+          <div>
+            <div class="item-name">Chicken Dum Biryani</div>
+            <div class="item-tags">
+              <span class="tag tag-bestseller">⭐ BESTSELLER</span>
+            </div>
+            <div class="item-desc">Slow cooked on dum, tender chicken, fragrant basmati</div>
           </div>
         </div>
+        <div class="variant-row">
+          <button class="vbtn sel" onclick="selectVariant(this,'Chicken Dum Biryani',169,'Half')">Half ₹169</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Dum Biryani',219,'Full')">Full ₹219</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Dum Biryani',469,'1 Kg')">1 Kg ₹469</button>
+        </div>
         <div class="item-bottom">
-          <div class="item-price" id="price-1">₹169</div>
-          <div class="qty-control" id="qc-1">
-            <button class="add-btn" onclick="addItem('Chicken Dum Biryani','1')">+</button>
-          </div>
+          <div class="item-price">from <b>₹169</b></div>
+          <button class="add-btn" onclick="addFromVariant('Chicken Dum Biryani',this,'🍛')">+</button>
         </div>
       </div>
     </div>
 
-    <!-- Chicken Tikka 21 Spices -->
     <div class="menu-card" data-name="chicken tikka 21 spices">
-      <div class="menu-card-img">🌶️</div>
+      <div class="menu-card-img">🥘</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag tag-chef">👨‍🍳 CHEF'S SPECIAL</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">Chicken Tikka 21 Spices</div>
-          <div class="item-desc">Secret blend of 21 spices, rich & bold flavours</div>
-          <div class="variant-row" id="vr-2">
-            <button class="vbtn sel" onclick="selectVariant('2','Half',199,this)">Half ₹199</button>
-            <button class="vbtn" onclick="selectVariant('2','Full',249,this)">Full ₹249</button>
-            <button class="vbtn" onclick="selectVariant('2','1kg',549,this)">1kg ₹549</button>
+        <div class="menu-card-top">
+          <div>
+            <div class="item-name">Chicken Tikka 21 Spices</div>
+            <div class="item-tags">
+              <span class="tag tag-chef">👨‍🍳 CHEF'S SPECIAL</span>
+            </div>
+            <div class="item-desc">Secret blend of 21 spices, rich & bold flavours</div>
           </div>
         </div>
+        <div class="variant-row">
+          <button class="vbtn sel" onclick="selectVariant(this,'Chicken Tikka 21 Spices',199,'Half')">Half ₹199</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Tikka 21 Spices',249,'Full')">Full ₹249</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Tikka 21 Spices',549,'1 Kg')">1 Kg ₹549</button>
+        </div>
         <div class="item-bottom">
-          <div class="item-price" id="price-2">₹199</div>
-          <div class="qty-control" id="qc-2">
-            <button class="add-btn" onclick="addItem('Chicken Tikka 21 Spices','2')">+</button>
-          </div>
+          <div class="item-price">from <b>₹199</b></div>
+          <button class="add-btn" onclick="addFromVariant('Chicken Tikka 21 Spices',this,'🥘')">+</button>
         </div>
       </div>
     </div>
 
-    <!-- Chicken Egg 21 Spices -->
     <div class="menu-card" data-name="chicken egg 21 spices">
-      <div class="menu-card-img">🥚</div>
+      <div class="menu-card-img">🍳</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Chicken Egg 21 Spices</div>
-          <div class="item-desc">Whole eggs in spiced biryani, comfort in a bowl</div>
-          <div class="variant-row" id="vr-3">
-            <button class="vbtn sel" onclick="selectVariant('3','Half',199,this)">Half ₹199</button>
-            <button class="vbtn" onclick="selectVariant('3','Full',249,this)">Full ₹249</button>
-            <button class="vbtn" onclick="selectVariant('3','1kg',549,this)">1kg ₹549</button>
+        <div class="menu-card-top">
+          <div>
+            <div class="item-name">Chicken Egg 21 Spices</div>
+            <div class="item-desc">Whole eggs in spiced biryani, comfort in a bowl</div>
           </div>
         </div>
+        <div class="variant-row">
+          <button class="vbtn sel" onclick="selectVariant(this,'Chicken Egg 21 Spices',199,'Half')">Half ₹199</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Egg 21 Spices',249,'Full')">Full ₹249</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Egg 21 Spices',549,'1 Kg')">1 Kg ₹549</button>
+        </div>
         <div class="item-bottom">
-          <div class="item-price" id="price-3">₹199</div>
-          <div class="qty-control" id="qc-3">
-            <button class="add-btn" onclick="addItem('Chicken Egg 21 Spices','3')">+</button>
-          </div>
+          <div class="item-price">from <b>₹199</b></div>
+          <button class="add-btn" onclick="addFromVariant('Chicken Egg 21 Spices',this,'🍳')">+</button>
         </div>
       </div>
     </div>
 
-    <!-- Chicken Dum 21 Spices Family Pack -->
-    <div class="menu-card" data-name="chicken dum 21 spices family pack">
-      <div class="menu-card-img">👨‍👩‍👦</div>
+    <div class="menu-card" data-name="chicken dum 21 spices family">
+      <div class="menu-card-img">👨‍👩‍👧‍👦</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Chicken Dum 21 Spices — FAMILY PACK</div>
-          <div class="item-desc">1 Kg Only — Perfect for family gatherings</div>
-        </div>
+        <div class="item-name">Chicken Dum 21 Spices</div>
+        <div class="item-tags"><span class="tag" style="background:rgba(100,100,255,0.18);color:#9090ff;">FAMILY PACK</span></div>
+        <div class="item-desc">Perfect for 4-6 people, ghee aur kesar wali recipe</div>
         <div class="item-bottom">
-          <div class="item-price" id="price-4">₹549 <small>1kg</small></div>
-          <div class="qty-control" id="qc-4">
-            <button class="add-btn" onclick="addItem('Dum 21 Spices Family Pack','4')">+</button>
-          </div>
+          <div class="item-price">1 Kg <b>₹549</b></div>
+          <button class="add-btn" onclick="addItem('Chicken Dum 21 Spices (1 Kg)',549,1,'👨‍👩‍👧‍👦')">+</button>
         </div>
       </div>
     </div>
 
-    <!-- Chicken Popcorn Biryani -->
     <div class="menu-card" data-name="chicken popcorn biryani">
       <div class="menu-card-img">🍿</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag tag-new">✨ NEW</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">Chicken Popcorn Biryani</div>
-          <div class="item-desc">Crispy popcorn chicken, unique twist on classic biryani</div>
-          <div class="variant-row" id="vr-5">
-            <button class="vbtn sel" onclick="selectVariant('5','Half',249,this)">Half ₹249</button>
-            <button class="vbtn" onclick="selectVariant('5','Full',299,this)">Full ₹299</button>
-            <button class="vbtn" onclick="selectVariant('5','1kg',599,this)">1kg ₹599</button>
+        <div class="menu-card-top">
+          <div>
+            <div class="item-name">Chicken Popcorn Biryani</div>
+            <div class="item-tags"><span class="tag tag-new">✨ NEW</span></div>
+            <div class="item-desc">Crispy popcorn chicken, unique twist on classic biryani</div>
           </div>
         </div>
+        <div class="variant-row">
+          <button class="vbtn sel" onclick="selectVariant(this,'Chicken Popcorn Biryani',249,'Half')">Half ₹249</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Popcorn Biryani',299,'Full')">Full ₹299</button>
+          <button class="vbtn" onclick="selectVariant(this,'Chicken Popcorn Biryani',599,'1 Kg')">1 Kg ₹599</button>
+        </div>
         <div class="item-bottom">
-          <div class="item-price" id="price-5">₹249</div>
-          <div class="qty-control" id="qc-5">
-            <button class="add-btn" onclick="addItem('Chicken Popcorn Biryani','5')">+</button>
-          </div>
+          <div class="item-price">from <b>₹249</b></div>
+          <button class="add-btn" onclick="addFromVariant('Chicken Popcorn Biryani',this,'🍿')">+</button>
         </div>
       </div>
     </div>
 
-    <!-- Mini Chicken Biryani -->
     <div class="menu-card" data-name="mini chicken biryani solo">
-      <div class="menu-card-img">🥣</div>
+      <div class="menu-card-img">🍱</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag" style="background:rgba(255,165,0,0.2); color: orange;">SOLO</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">Mini Chicken Biryani — SOLO</div>
-          <div class="item-desc">Perfect single-serve biryani for solo cravings</div>
-        </div>
+        <div class="item-name">Mini Chicken Biryani</div>
+        <div class="item-tags"><span class="tag" style="background:rgba(200,100,255,0.18);color:#cc88ff;">SOLO</span></div>
+        <div class="item-desc">Perfect single serving — quick, tasty, satisfying</div>
         <div class="item-bottom">
-          <div class="item-price" id="price-6">₹139</div>
-          <div class="qty-control" id="qc-6">
-            <button class="add-btn" onclick="addItem('Mini Chicken Biryani','6')">+</button>
-          </div>
+          <div class="item-price"><b>₹139</b></div>
+          <button class="add-btn" onclick="addItem('Mini Chicken Biryani',139,1,'🍱')">+</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========== STARTERS ========== -->
-  <div class="menu-section" id="starters">
+  <!-- ─── ROYAL STARTERS ─── -->
+  <div class="menu-section" id="sec-starters">
     <div class="menu-section-title">🍗 Royal Starters</div>
 
     <div class="menu-card" data-name="crispy lollipop">
       <div class="menu-card-img">🍗</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Crispy Lollipop</div>
-          <div class="item-desc">4 pcs — Golden crispy, perfectly fried</div>
-        </div>
+        <div class="item-name">Crispy Lollipop</div>
+        <div class="item-desc">4 pcs — Golden crispy, ekdum perfect fry</div>
         <div class="item-bottom">
-          <div class="item-price">₹189</div>
-          <button class="add-btn" onclick="addItem('Crispy Lollipop (4pcs)','s1',189)">+</button>
+          <div class="item-price"><b>₹189</b></div>
+          <button class="add-btn" onclick="addItem('Crispy Lollipop',189,1,'🍗')">+</button>
         </div>
       </div>
     </div>
 
     <div class="menu-card" data-name="hot lollipop">
-      <div class="menu-card-img">🌶️</div>
+      <div class="menu-card-img">🔥</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Hot Lollipop</div>
-          <div class="item-desc">4 pcs — Fiery hot glaze</div>
-        </div>
+        <div class="item-name">Hot Lollipop</div>
+        <div class="item-desc">4 pcs — Fiery hot glaze, teekhaa maza!</div>
         <div class="item-bottom">
-          <div class="item-price">₹189</div>
-          <button class="add-btn" onclick="addItem('Hot Lollipop (4pcs)','s2',189)">+</button>
+          <div class="item-price"><b>₹189</b></div>
+          <button class="add-btn" onclick="addItem('Hot Lollipop',189,1,'🔥')">+</button>
         </div>
       </div>
     </div>
 
     <div class="menu-card" data-name="chicken wings">
-      <div class="menu-card-img">🍖</div>
+      <div class="menu-card-img">🍗</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Chicken Wings</div>
-          <div class="item-desc">5 pcs — Classic marinated</div>
-        </div>
+        <div class="item-name">Chicken Wings</div>
+        <div class="item-desc">5 pcs — Classic marinated, juicy wings</div>
         <div class="item-bottom">
-          <div class="item-price">₹189</div>
-          <button class="add-btn" onclick="addItem('Chicken Wings (5pcs)','s3',189)">+</button>
+          <div class="item-price"><b>₹189</b></div>
+          <button class="add-btn" onclick="addItem('Chicken Wings',189,1,'🍗')">+</button>
         </div>
       </div>
     </div>
 
     <div class="menu-card" data-name="crispy wings">
-      <div class="menu-card-img">✨</div>
+      <div class="menu-card-img">🍗</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Crispy Wings</div>
-          <div class="item-desc">5 pcs — Extra crispy batter</div>
-        </div>
+        <div class="item-name">Crispy Wings</div>
+        <div class="item-desc">5 pcs — Extra crispy batter, crunchy har bite</div>
         <div class="item-bottom">
-          <div class="item-price">₹189</div>
-          <button class="add-btn" onclick="addItem('Crispy Wings (5pcs)','s4',189)">+</button>
+          <div class="item-price"><b>₹189</b></div>
+          <button class="add-btn" onclick="addItem('Crispy Wings',189,1,'🍗')">+</button>
         </div>
       </div>
     </div>
@@ -381,49 +371,43 @@
     <div class="menu-card" data-name="chicken popcorn">
       <div class="menu-card-img">🍿</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Chicken Popcorn</div>
-          <div class="item-desc">20-22 pcs — Bite sized, super crispy</div>
-        </div>
+        <div class="item-name">Chicken Popcorn</div>
+        <div class="item-desc">20-22 pcs — Bite sized, perfect snack</div>
         <div class="item-bottom">
-          <div class="item-price">₹219</div>
-          <button class="add-btn" onclick="addItem('Chicken Popcorn (20-22pcs)','s5',219)">+</button>
+          <div class="item-price"><b>₹219</b></div>
+          <button class="add-btn" onclick="addItem('Chicken Popcorn',219,1,'🍿')">+</button>
         </div>
       </div>
     </div>
 
     <div class="menu-card" data-name="chicken tikka fry">
-      <div class="menu-card-img">🥩</div>
+      <div class="menu-card-img">🔥</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-name">Chicken Tikka Fry</div>
-          <div class="item-desc">8 pcs — Smoky charred, restaurant style</div>
-        </div>
+        <div class="item-name">Chicken Tikka Fry</div>
+        <div class="item-desc">8 pcs — Smoky charred, Bhopal ka favourite</div>
         <div class="item-bottom">
-          <div class="item-price">₹239</div>
-          <button class="add-btn" onclick="addItem('Chicken Tikka Fry (8pcs)','s6',239)">+</button>
+          <div class="item-price"><b>₹239</b></div>
+          <button class="add-btn" onclick="addItem('Chicken Tikka Fry',239,1,'🔥')">+</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========== COMBOS ========== -->
-  <div class="menu-section" id="combos">
-    <div class="menu-section-title">🎉 Royal Combos</div>
+  <!-- ─── ROYAL COMBOS ─── -->
+  <div class="menu-section" id="sec-combos">
+    <div class="menu-section-title">🎯 Royal Combos</div>
 
     <div class="menu-card" data-name="all in one combo">
-      <div class="menu-card-img">🎊</div>
+      <div class="menu-card-img">🎯</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag tag-bestseller">⭐ BEST VALUE</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">All in One Combo</div>
-          <div class="item-desc">Biryani + Tikka (2pcs) + Crispy Lollipop (2pcs) + Crispy Wings (2pcs) + Popcorn (12-15pcs) + Cold Drink</div>
+        <div class="item-name">All in One Combo</div>
+        <div class="item-tags">
+          <span class="tag" style="background:rgba(255,200,0,0.18);color:#ffd700;">⭐ BEST VALUE</span>
         </div>
+        <div class="item-desc">Biryani + Tikka (2 pcs) + Crispy Lollipop (2 pcs) + Crispy Wings (2 pcs) + Popcorn (12-15 pcs) + Cold Drink</div>
         <div class="item-bottom">
-          <div class="item-price">₹649</div>
-          <button class="add-btn" onclick="addItem('All in One Combo','c1',649)">+</button>
+          <div class="item-price"><b>₹649</b></div>
+          <button class="add-btn" onclick="addItem('All in One Combo',649,1,'🎯')">+</button>
         </div>
       </div>
     </div>
@@ -431,33 +415,29 @@
     <div class="menu-card" data-name="biryani combo">
       <div class="menu-card-img">🍱</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag" style="background:rgba(46,213,115,0.2); color:#2ed573;">SAVE ₹50</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">Biryani Combo</div>
-          <div class="item-desc">Chicken Dum Biryani + 3 Crispy Lollipop + 3 Tikka Fry + Cold Drink (250ml) + Mint Raita</div>
+        <div class="item-name">Biryani Combo</div>
+        <div class="item-tags">
+          <span class="tag" style="background:rgba(50,200,50,0.18);color:#50e050;">SAVE ₹50</span>
         </div>
+        <div class="item-desc">Chicken Dum Biryani + 3 Crispy Lollipop + 3 Tikka Fry + Cold Drink (250ml) + Mint Raita</div>
         <div class="item-bottom">
-          <div class="item-price">₹399 <small style="text-decoration:line-through; color:var(--text-muted);">₹449</small></div>
-          <button class="add-btn" onclick="addItem('Biryani Combo','c2',399)">+</button>
+          <div class="item-price"><b>₹399</b> <small style="text-decoration:line-through;color:var(--text-muted)">₹449</small></div>
+          <button class="add-btn" onclick="addItem('Biryani Combo',399,1,'🍱')">+</button>
         </div>
       </div>
     </div>
 
     <div class="menu-card" data-name="full biryani tikka hot spicy">
-      <div class="menu-card-img">🔥</div>
+      <div class="menu-card-img">🌶️</div>
       <div class="menu-card-body">
-        <div>
-          <div class="item-tags">
-            <span class="tag" style="background:rgba(46,213,115,0.2); color:#2ed573;">SAVE ₹40</span>
-          </div>
-          <div class="item-name" style="margin-top: 4px;">Full Biryani + Tikka Hot Spicy</div>
-          <div class="item-desc">Chicken Biryani (Full) + 4 Tikka Hot Spicy Fry + Mint Raita + Garlic Raita + Sauce</div>
+        <div class="item-name">Full Biryani + Tikka Hot Spicy</div>
+        <div class="item-tags">
+          <span class="tag" style="background:rgba(50,200,50,0.18);color:#50e050;">SAVE ₹40</span>
         </div>
+        <div class="item-desc">Chicken Biryani (Full) + 4 Tikka Hot Spicy Fry + Mint Raita + Garlic Raita + Sauce</div>
         <div class="item-bottom">
-          <div class="item-price">₹349 <small style="text-decoration:line-through; color:var(--text-muted);">₹389</small></div>
-          <button class="add-btn" onclick="addItem('Full Biryani + Tikka Hot Spicy','c3',349)">+</button>
+          <div class="item-price"><b>₹349</b> <small style="text-decoration:line-through;color:var(--text-muted)">₹389</small></div>
+          <button class="add-btn" onclick="addItem('Full Biryani + Tikka Hot Spicy',349,1,'🌶️')">+</button>
         </div>
       </div>
     </div>
@@ -465,81 +445,125 @@
 
   <div class="spacer-20"></div>
 
+  <!-- Cart strip (bottom floating) -->
+  <div class="cart-strip" id="cart-strip" onclick="openCart()">
+    <span id="cart-label">🛒 0 items</span>
+    <div class="cart-right">
+      <span id="cart-total-label">₹0</span>
+      <div class="cart-count" id="cart-count">0</div>
+    </div>
+  </div>
+
   <!-- Bottom Nav -->
   <nav class="bottom-nav">
-    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Home</span></a>
-    <a class="nav-item active" href="menu.html"><span class="nav-icon">📜</span><span>Menu</span></a>
-    <a class="nav-item" href="offers.html"><span class="nav-icon">🎁</span><span>Offers</span></a>
-    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item" href="dashboard.html"><div class="nav-icon">🏠</div>Home</a>
+    <a class="nav-item active" href="menu.html"><div class="nav-icon">🍽️</div>Menu</a>
+    <a class="nav-item" href="offers.html"><div class="nav-icon">🎁</div>Offers</a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon">👤</div>Profile</a>
   </nav>
 </div>
 
-<!-- Cart Strip -->
-<div class="cart-strip" id="cart-strip" onclick="openCart()">
-  <span id="cart-label">🛒 0 items</span>
-  <div class="cart-right">
-    <span id="cart-total-label">₹0</span>
-    <div class="cart-count" id="cart-count">0</div>
-    <span>→</span>
+<!-- ══ CART OVERLAY ══ -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCartOutside(event)">
+  <div class="cart-sheet">
+    <div class="cart-handle"></div>
+    <div class="cart-header">
+      <h3>🛒 Aapka Cart</h3>
+      <button class="cart-close-btn" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body">
+      <div id="cart-items-list" style="padding:0 0 10px">
+        <p style="color:var(--text-muted);text-align:center;padding:30px 20px;font-size:13px;">Cart khali hai! Menu se add karo 🍛</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-lbl">Total:</span>
+        <span class="cart-total-val" id="modal-total">₹0</span>
+      </div>
+      <button class="checkout-btn" onclick="startCheckout()">
+        📍 Deliver Here → Order on WhatsApp
+      </button>
+    </div>
   </div>
 </div>
 
-<!-- Cart Modal -->
-<div class="cart-modal-overlay" id="cart-overlay" onclick="closeCartOutside(event)">
-  <div class="cart-modal">
-    <button class="close-cart" onclick="closeCart()">✕</button>
-    <div class="cart-modal-title">Your Order 🛒</div>
-    <div id="cart-items-list"></div>
-    <div class="cart-total">
-      <span>Total</span>
-      <span id="modal-total" style="color: var(--gold);">₹0</span>
+<!-- ══ LOCATION + NAME MODAL ══ -->
+<div class="loc-overlay" id="loc-overlay" onclick="closeLocOutside(event)">
+  <div class="loc-sheet">
+    <div class="loc-handle"></div>
+    <div class="loc-title">📍 Delivery Details</div>
+    <div class="loc-sub">Hum aapka order deliver karne ke liye aapki location chahte hain. Name aur phone bhi confirm karo!</div>
+
+    <div class="loc-field">
+      <label class="loc-label">👤 Aapka Naam</label>
+      <input class="loc-input" type="text" id="delivery-name" placeholder="e.g. Rahul Kumar" />
     </div>
-    <button class="checkout-btn" onclick="checkout()">Place Order on WhatsApp 📱</button>
+    <div class="loc-field">
+      <label class="loc-label">📱 Phone Number</label>
+      <input class="loc-input" type="tel" inputmode="numeric" id="delivery-phone" placeholder="+91 XXXXX XXXXX" maxlength="13" />
+    </div>
+
+    <button class="loc-btn" id="get-loc-btn" onclick="getLocation()">
+      📡 GPS se Location Detect Karo
+    </button>
+    <div class="loc-status" id="loc-status"></div>
+
+    <div class="loc-or">── ya manually likhein ──</div>
+    <textarea class="manual-address" id="manual-address" rows="3"
+      placeholder="e.g. House No. 42, Vijay Nagar, Bhopal — 462001"></textarea>
+
+    <button class="loc-btn" id="send-wa-btn" onclick="sendToWhatsApp()">
+      📲 WhatsApp Par Order Bhejo
+    </button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// =========== CART ===========
+/* ══════════════ CART STATE ══════════════ */
 let cart = [];
-let variants = {
-  '1': { name: 'Half', price: 169 },
-  '2': { name: 'Half', price: 199 },
-  '3': { name: 'Half', price: 199 },
-  '5': { name: 'Half', price: 249 },
-};
-const staticPrices = {
-  '4': 549, '6': 139,
-  's1': 189, 's2': 189, 's3': 189, 's4': 189, 's5': 219, 's6': 239,
-  'c1': 649, 'c2': 399, 'c3': 349
-};
+let detectedLocation = '';
+let locationCoords = null;
 
-function selectVariant(id, name, price, btn) {
-  variants[id] = { name, price };
-  document.getElementById('price-' + id).textContent = '₹' + price;
-  document.querySelectorAll('#vr-' + id + ' .vbtn').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-}
+const WHATSAPP_NUMBER = '919585877758';
 
-function addItem(name, id, customPrice) {
-  const price = customPrice || (variants[id] ? variants[id].price : staticPrices[id]);
-  const variantName = variants[id] ? variants[id].name : '';
-  const fullName = variantName ? name + ' (' + variantName + ')' : name;
-  
-  const existing = cart.find(i => i.name === fullName);
-  if (existing) { existing.qty++; existing.total += price; }
-  else { cart.push({ name: fullName, price, qty: 1, total: price }); }
-  
+/* ── ADD ITEM (fixed price) ── */
+function addItem(name, price, qty, emoji) {
+  const ex = cart.find(i => i.name === name);
+  if (ex) { ex.qty += qty; ex.total = ex.qty * ex.price; }
+  else { cart.push({ name, price, qty, total: price * qty, emoji: emoji || '🍛' }); }
   updateCartUI();
-  showToast(name + ' added! 🍛');
+  showToast(name.split('(')[0].trim() + ' cart mein add! 🍛');
+  const btn = event.target;
+  if (btn) { btn.textContent = '✓'; btn.style.background = '#2ed573'; btn.style.color = '#000'; setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; btn.style.color = ''; }, 1800); }
 }
 
+/* ── ADD FROM VARIANT ── */
+const variantState = {};
+function selectVariant(btn, itemName, price, size) {
+  const card = btn.closest('.menu-card');
+  card.querySelectorAll('.vbtn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  variantState[itemName] = { price, size };
+}
+
+function addFromVariant(itemName, addBtn, emoji) {
+  const card = addBtn.closest('.menu-card');
+  const sel = card.querySelector('.vbtn.sel');
+  if (!sel) { showToast('Size select karo pehle!'); return; }
+  const price = parseInt(sel.textContent.replace(/[^0-9]/g,''));
+  const size = sel.textContent.split(' ')[0];
+  addItem(`${itemName} (${size})`, price, 1, emoji);
+}
+
+/* ── UI UPDATE ── */
 function updateCartUI() {
   const count = cart.reduce((a, i) => a + i.qty, 0);
   const total = cart.reduce((a, i) => a + i.total, 0);
   const strip = document.getElementById('cart-strip');
-  
+
   if (count > 0) {
     strip.style.display = 'flex';
     document.getElementById('cart-label').textContent = '🛒 ' + count + ' item' + (count > 1 ? 's' : '');
@@ -549,36 +573,159 @@ function updateCartUI() {
   } else {
     strip.style.display = 'none';
   }
-  
-  // Update modal list
+
   const list = document.getElementById('cart-items-list');
-  list.innerHTML = cart.map(i => `
+  if (cart.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:30px 20px;font-size:13px;">Cart khali hai! Menu se add karo 🍛</p>';
+    return;
+  }
+  list.innerHTML = cart.map((item, idx) => `
     <div class="cart-row">
-      <span class="cart-row-name">${i.name}</span>
-      <span class="cart-row-qty">×${i.qty}</span>
-      <span class="cart-row-price">₹${i.total}</span>
-      <button onclick="removeItem('${i.name}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;margin-left:8px;">✕</button>
+      <div class="cart-row-emoji">${item.emoji}</div>
+      <div class="cart-row-name">${item.name}</div>
+      <div class="cart-row-qty">×${item.qty}</div>
+      <div class="cart-row-price">₹${item.total}</div>
+      <button class="cart-remove" onclick="removeItem(${idx})">✕</button>
     </div>
-  `).join('') || '<p style="color:var(--text-muted);text-align:center;padding:20px;">Cart is empty</p>';
+  `).join('');
 }
 
-function removeItem(name) {
-  cart = cart.filter(i => i.name !== name);
+function removeItem(idx) {
+  cart.splice(idx, 1);
   updateCartUI();
 }
 
-function openCart() { document.getElementById('cart-overlay').classList.add('open'); }
+/* ── CART OPEN/CLOSE ── */
+function openCart() {
+  if (cart.length === 0) { showToast('Pehle kuch items add karo! 🍛'); return; }
+  document.getElementById('cart-overlay').classList.add('open');
+}
 function closeCart() { document.getElementById('cart-overlay').classList.remove('open'); }
 function closeCartOutside(e) { if (e.target === document.getElementById('cart-overlay')) closeCart(); }
 
-function checkout() {
-  if (cart.length === 0) return;
-  const total = cart.reduce((a, i) => a + i.total, 0);
-  const itemsList = cart.map(i => `${i.name} ×${i.qty} = ₹${i.total}`).join('%0A');
-  const msg = `🍛 *The Biryani Box Order*%0A%0A${itemsList}%0A%0A*Total: ₹${total}*%0A%0APlease confirm my order!`;
-  window.open('https://wa.me/91XXXXXXXXXX?text=' + msg, '_blank');
+/* ── START CHECKOUT ── */
+function startCheckout() {
+  if (cart.length === 0) { showToast('Cart khali hai!'); return; }
+  closeCart();
+  // Pre-fill user info
+  const user = JSON.parse(localStorage.getItem('bb_user') || '{}');
+  if (user.name) document.getElementById('delivery-name').value = user.name;
+  if (user.phone) document.getElementById('delivery-phone').value = user.phone;
+  document.getElementById('loc-overlay').classList.add('open');
+}
+function closeLocOutside(e) { if (e.target === document.getElementById('loc-overlay')) document.getElementById('loc-overlay').classList.remove('open'); }
+
+/* ── GET GPS LOCATION ── */
+function getLocation() {
+  const btn = document.getElementById('get-loc-btn');
+  const status = document.getElementById('loc-status');
+
+  btn.classList.add('loading');
+  btn.textContent = '📡 Location detect ho rahi hai...';
+  status.className = 'loc-status';
+  status.textContent = 'GPS se coordinates le rahe hain...';
+
+  if (!navigator.geolocation) {
+    btn.classList.remove('loading');
+    btn.textContent = '📡 GPS se Location Detect Karo';
+    status.className = 'loc-status error';
+    status.textContent = '❌ GPS is device mein supported nahi. Manually address likhein.';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      locationCoords = { lat, lng };
+      detectedLocation = `https://maps.google.com/?q=${lat},${lng}`;
+
+      btn.classList.remove('loading');
+      btn.textContent = '✅ Location Detected!';
+      btn.style.background = '#2ed573';
+      btn.style.color = '#000';
+
+      status.className = 'loc-status success';
+      status.textContent = `✅ Location mil gayi! (${lat}, ${lng}) — Maps link order ke saath jayega.`;
+
+      // Also fill manual address field
+      document.getElementById('manual-address').placeholder = `GPS: ${lat}, ${lng} — Maps: ${detectedLocation}`;
+    },
+    (err) => {
+      btn.classList.remove('loading');
+      btn.textContent = '📡 GPS se Location Detect Karo';
+      status.className = 'loc-status error';
+
+      let msg = '❌ Location access denied. Manually address likhein ya browser settings mein allow karein.';
+      if (err.code === 1) msg = '❌ Location permission deny ki. Browser settings > Allow karein.';
+      else if (err.code === 2) msg = '❌ GPS signal nahi mila. Manually address likhein.';
+      status.textContent = msg;
+    },
+    { timeout: 10000, enableHighAccuracy: true }
+  );
 }
 
+/* ── SEND TO WHATSAPP ── */
+function sendToWhatsApp() {
+  const name = document.getElementById('delivery-name').value.trim();
+  const phone = document.getElementById('delivery-phone').value.trim();
+  const manualAddr = document.getElementById('manual-address').value.trim();
+
+  if (!name) { showToast('✋ Apna naam daalo!'); document.getElementById('delivery-name').focus(); return; }
+  if (!phone || phone.length < 10) { showToast('✋ Phone number daalo!'); document.getElementById('delivery-phone').focus(); return; }
+  if (!detectedLocation && !manualAddr) { showToast('✋ Location ya address daalo!'); return; }
+
+  const total = cart.reduce((a, i) => a + i.total, 0);
+  const itemsText = cart.map(i => `  • ${i.name} ×${i.qty} = ₹${i.total}`).join('%0A');
+
+  const locationLine = detectedLocation
+    ? `📍 GPS Location: ${detectedLocation}`
+    : `📍 Address: ${manualAddr}`;
+
+  const manualLine = manualAddr && detectedLocation
+    ? `%0A📌 Address: ${manualAddr}`
+    : '';
+
+  const msg = [
+    `🍛 *NEW ORDER — The Biryani Box*`,
+    `━━━━━━━━━━━━━━━━━━━━`,
+    `👤 *Naam:* ${name}`,
+    `📱 *Phone:* ${phone}`,
+    ``,
+    `🛒 *Order Details:*`,
+    itemsText,
+    ``,
+    `💰 *Total: ₹${total}*`,
+    ``,
+    locationLine,
+    manualLine,
+    `━━━━━━━━━━━━━━━━━━━━`,
+    `Order confirm karein please! 🙏`
+  ].filter(Boolean).join('%0A');
+
+  // Save order to history
+  const user = JSON.parse(localStorage.getItem('bb_user') || '{}');
+  const orders = JSON.parse(localStorage.getItem('bb_orders') || '[]');
+  orders.unshift({
+    id: '#BB' + String(Date.now()).slice(-4),
+    items: cart, total,
+    date: new Date().toLocaleDateString('en-IN'),
+    name, phone
+  });
+  localStorage.setItem('bb_orders', JSON.stringify(orders.slice(0, 10)));
+  if (user) { user.name = name; user.phone = phone; localStorage.setItem('bb_user', JSON.stringify(user)); }
+
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  window.open(waUrl, '_blank');
+
+  // Clear cart & close
+  cart = [];
+  updateCartUI();
+  document.getElementById('loc-overlay').classList.remove('open');
+  showToast('🎉 Order WhatsApp pe bhej diya! Confirm hone ka wait karo.');
+}
+
+/* ── SEARCH ── */
 function filterMenu() {
   const q = document.getElementById('search-input').value.toLowerCase();
   document.querySelectorAll('.menu-card').forEach(card => {
@@ -587,27 +734,33 @@ function filterMenu() {
   });
 }
 
-function scrollTo(id, el) {
+/* ── SCROLL TO SECTION ── */
+function scrollToSection(id, el) {
   document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/* ── TOAST ── */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// AI recs rotation
+/* ── AI REC ── */
 const recs = [
-  'Aaj <b>Chicken Tikka 21 Spices</b> try karo — Chef\'s Special! ₹249',
-  'Weekend special: <b>All in One Combo ₹649</b> — best value deal!',
-  'Naya item: <b>Chicken Popcorn Biryani</b> — unique twist! ₹249',
-  '<b>Biryani Combo ₹399</b> — save ₹50 today!'
+  'Aaj <b>Chicken Tikka 21 Spices</b> try karo — Chef\'s Special! ₹199 se shuru',
+  'Weekend best pick: <b>All in One Combo ₹649</b> — family ke liye perfect!',
+  'Naya item: <b>Chicken Popcorn Biryani</b> — unique twist, sirf ₹249!',
+  '<b>Biryani Combo ₹399</b> — ₹50 save karo aaj! Most popular choice.',
+  'Solo mood? <b>Mini Chicken Biryani ₹139</b> — quick & tasty!'
 ];
 document.getElementById('ai-menu-rec').innerHTML = recs[Math.floor(Math.random() * recs.length)];
+
+/* ── AUTH CHECK ── */
+if (!localStorage.getItem('bb_user')) location.href = 'index.html';
 </script>
 </body>
 </html>
