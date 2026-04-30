@@ -534,9 +534,7 @@ body {
 .profile-name { font-size: 20px; font-weight: 700; color: var(--gold); }
 .profile-phone { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
 
-.profile-menu {
-  margin: 0 20px;
-}
+.profile-menu { margin: 0 20px; }
 .profile-item {
   background: var(--dark-card);
   border: 1px solid #1e2e1e;
@@ -567,10 +565,7 @@ body {
 .profile-item-arrow { color: var(--text-muted); font-size: 18px; }
 
 /* ============ REVIEW PAGE ============ */
-.review-header {
-  text-align: center;
-  padding: 30px 20px 20px;
-}
+.review-header { text-align: center; padding: 30px 20px 20px; }
 .review-logo {
   font-family: 'Cormorant Garamond', serif;
   font-size: 28px;
@@ -579,12 +574,7 @@ body {
 }
 .review-tagline { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 
-.star-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
-}
+.star-row { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
 .star-btn {
   font-size: 44px;
   background: none;
@@ -642,10 +632,7 @@ body {
   justify-content: center;
   gap: 8px;
 }
-.negative-box {
-  padding: 0 20px;
-  display: none;
-}
+.negative-box { padding: 0 20px; display: none; }
 .negative-box textarea {
   width: 100%;
   background: var(--dark-card);
@@ -692,9 +679,7 @@ body {
   padding: 40px 30px;
   text-align: center;
 }
-.login-logo-box {
-  margin-bottom: 10px;
-}
+.login-logo-box { margin-bottom: 10px; }
 .login-logo-text {
   font-family: 'Cormorant Garamond', serif;
   font-size: 42px;
@@ -744,6 +729,7 @@ body {
   transition: border-color 0.2s;
 }
 .phone-input:focus { border-color: var(--gold); }
+
 .otp-btn {
   width: 100%;
   background: var(--gold);
@@ -758,25 +744,25 @@ body {
   transition: opacity 0.2s;
 }
 .otp-btn:hover { opacity: 0.9; }
-.otp-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-}
+
+/* ✅ OTP UI improved */
+.otp-row { display: flex; gap: 10px; margin-bottom: 14px; }
 .otp-input {
   flex: 1;
-  padding: 14px 0;
+  height: 54px;
   border: 1px solid var(--border-gold);
   border-radius: 12px;
   background: rgba(255,255,255,0.05);
   color: white;
   font-family: 'Poppins', sans-serif;
-  font-size: 20px;
+  font-size: 22px;
+  letter-spacing: 2px;
   text-align: center;
   outline: none;
   transition: border-color 0.2s;
 }
 .otp-input:focus { border-color: var(--gold); }
+
 .login-note { font-size: 11px; color: var(--text-muted); margin-top: 20px; }
 
 /* ============ PAGE TRANSITION ============ */
