@@ -2,222 +2,257 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Dashboard | The Biryani Box Elite</title>
   <link rel="stylesheet" href="public/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    .greeting-day { font-size: 13px; color: var(--text-muted); }
-    .greeting-name { font-size: 26px; font-weight: 700; color: var(--gold-light); font-family: 'Cormorant Garamond', serif; margin-top: 2px; }
-    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px; margin-bottom: 16px; }
-    .quick-card {
-      background: var(--dark-card);
-      border: 1px solid #1e2e1e;
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.15s;
-      text-decoration: none;
-      color: white;
-      display: block;
-    }
-    .quick-card:active { transform: scale(0.97); }
-    .quick-card:hover { border-color: var(--border-gold); }
-    .quick-icon { font-size: 28px; margin-bottom: 6px; }
-    .quick-label { font-size: 12px; font-weight: 600; }
-    .quick-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-    .tier-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(197,160,89,0.1);
-      border: 1px solid var(--border-gold);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 8px;
-    }
-    .order-history { padding: 0 20px; }
-    .order-item {
-      background: var(--dark-card);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
-      border: 1px solid #1e2e1e;
-    }
-    .order-icon { font-size: 28px; }
-    .order-info { flex: 1; }
-    .order-name { font-size: 13px; font-weight: 600; }
-    .order-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-    .order-price { color: var(--gold); font-weight: 700; font-size: 14px; }
-    .wallet-actions { display: flex; gap: 10px; margin-top: 10px; }
+    .greeting-wrap { padding: 6px 20px 14px; }
+    .greeting-day { font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px; }
+    .greeting-name { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700; color:var(--gold-light); line-height:1.1; }
+    .tier-badge-row { padding: 0 20px 10px; }
+    .tier-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(197,160,89,0.1); border:1px solid var(--border-gold); padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700; color:var(--gold); }
+    .ai-box { margin:0 20px 16px; background:rgba(197,160,89,0.07); border-left:3px solid var(--gold); border-radius:0 14px 14px 0; padding:14px 16px; }
+    .ai-label { font-size:10px; color:var(--gold); text-transform:uppercase; letter-spacing:2px; margin-bottom:7px; font-weight:600; display:flex; align-items:center; gap:6px; }
+    .ai-dot { width:7px; height:7px; background:#6be88a; border-radius:50%; animation:blink 1.5s ease-in-out infinite; }
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    .ai-text { font-size:13px; line-height:1.65; color:rgba(255,255,255,0.88); }
+    .ai-text em { color:var(--gold); font-style:normal; font-weight:600; }
+    .ai-refresh { margin-top:10px; background:none; border:1px solid rgba(197,160,89,0.25); color:var(--gold); font-family:'Poppins',sans-serif; font-size:11px; font-weight:600; padding:6px 14px; border-radius:20px; cursor:pointer; transition:all 0.2s; }
+    .ai-refresh:hover { background:rgba(197,160,89,0.1); }
+    .quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 20px; margin-bottom:20px; }
+    .quick-card { background:var(--dark-card); border:1px solid #1e2e1e; border-radius:16px; padding:16px; text-align:center; cursor:pointer; transition:all 0.2s; text-decoration:none; color:white; display:block; }
+    .quick-card:hover { border-color:var(--border-gold); transform:translateY(-2px); }
+    .quick-card:active { transform:scale(0.97); }
+    .quick-icon { font-size:30px; margin-bottom:7px; }
+    .quick-label { font-size:12px; font-weight:700; }
+    .quick-sub { font-size:10px; color:var(--text-muted); margin-top:2px; }
+    .mission-strip { margin:0 20px 16px; background:linear-gradient(90deg,rgba(197,160,89,0.12),rgba(197,160,89,0.05)); border:1px dashed var(--border-gold-strong); border-radius:14px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .mission-text h4 { font-size:13.5px; font-weight:700; line-height:1.3; }
+    .mission-text p { font-size:11px; color:var(--text-muted); margin-top:3px; line-height:1.4; }
+    .mission-btn { background:var(--gold); color:var(--primary); border:none; padding:10px 16px; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:opacity 0.2s; font-family:'Poppins',sans-serif; }
+    .mission-btn:hover { opacity:0.9; }
+    .offers-scroll { display:flex; gap:10px; padding:0 20px 14px; overflow-x:auto; scrollbar-width:none; }
+    .offers-scroll::-webkit-scrollbar { display:none; }
+    .offer-pill { display:flex; align-items:center; gap:7px; background:var(--dark-card); border:1px solid #2a3a2a; border-radius:22px; padding:9px 14px; white-space:nowrap; cursor:pointer; transition:all 0.2s; flex-shrink:0; font-size:11.5px; font-weight:600; }
+    .offer-pill:hover { border-color:var(--border-gold); }
+    .offer-pill span { color:var(--gold); }
+    .menu-preview-scroll { display:flex; gap:12px; padding:0 20px 16px; overflow-x:auto; scrollbar-width:none; }
+    .menu-preview-scroll::-webkit-scrollbar { display:none; }
+    .mp-card { flex-shrink:0; width:150px; background:var(--dark-card); border:1px solid #1e2e1e; border-radius:16px; overflow:hidden; cursor:pointer; transition:all 0.2s; }
+    .mp-card:hover { border-color:var(--border-gold); transform:translateY(-3px); }
+    .mp-img { width:100%; height:96px; display:flex; align-items:center; justify-content:center; font-size:42px; background:rgba(0,0,0,0.2); position:relative; }
+    .mp-badge { position:absolute; top:7px; left:7px; font-size:8px; font-weight:800; padding:2px 7px; border-radius:10px; letter-spacing:0.05em; }
+    .mp-body { padding:11px 11px 12px; }
+    .mp-name { font-size:12.5px; font-weight:700; margin-bottom:4px; line-height:1.3; }
+    .mp-footer { display:flex; align-items:center; justify-content:space-between; }
+    .mp-price { font-size:14px; font-weight:800; color:var(--gold); }
+    .mp-add { background:var(--gold); border:none; color:var(--primary); width:28px; height:28px; border-radius:8px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; transition:transform 0.15s; line-height:1; }
+    .mp-add:active { transform:scale(0.88); }
+    .order-item { background:var(--dark-card); border:1px solid #1e2e1e; border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:10px; transition:border-color 0.2s; }
+    .order-item:hover { border-color:var(--border-gold); }
+    .order-icon { font-size:28px; }
+    .order-info { flex:1; min-width:0; }
+    .order-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .order-date { font-size:11px; color:var(--text-muted); margin-top:2px; }
+    .order-price { color:var(--gold); font-weight:700; font-size:14px; white-space:nowrap; }
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:300; display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .modal-overlay.show { opacity:1; pointer-events:all; }
+    .modal-sheet { background:linear-gradient(180deg,#0d2e10 0%,#040e05 100%); border:1px solid rgba(197,160,89,0.3); border-bottom:none; border-radius:26px 26px 0 0; width:100%; max-width:430px; padding:0 22px 36px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(.4,0,.2,1); }
+    .modal-overlay.show .modal-sheet { transform:translateY(0); }
+    .modal-handle { width:40px; height:4px; background:rgba(197,160,89,0.25); border-radius:20px; margin:14px auto 18px; }
+    .modal-title { font-size:18px; font-weight:800; text-align:center; margin-bottom:5px; }
+    .modal-desc { font-size:12.5px; color:var(--text-muted); text-align:center; margin-bottom:16px; line-height:1.5; }
+    #story-canvas { width:100%; border-radius:14px; border:1px solid rgba(197,160,89,0.2); margin-bottom:14px; display:block; }
+    .modal-dl-btn { width:100%; background:var(--gold); color:var(--primary); border:none; padding:15px; border-radius:14px; font-weight:800; font-size:14px; cursor:pointer; margin-bottom:10px; letter-spacing:0.05em; text-transform:uppercase; font-family:'Poppins',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .modal-close-btn { width:100%; background:none; border:1px solid rgba(197,160,89,0.2); color:var(--text-muted); font-family:'Poppins',sans-serif; font-size:13px; padding:12px; border-radius:12px; cursor:pointer; transition:all 0.2s; }
+    .modal-close-btn:hover { border-color:var(--gold); color:var(--gold); }
   </style>
 </head>
 <body>
 <div class="app page-fade">
-
-  <!-- Header -->
   <div class="top-header">
-    <div>
-      <div class="greeting-day" id="day-greeting">Salam!</div>
-      <div class="greeting-name" id="user-name">Biryani Lover</div>
-    </div>
-    <div class="notif-btn">🔔</div>
+    <div class="brand-name">The Biryani Box</div>
+    <div class="notif-btn" onclick="showToast('🔔 2 nayi notifications hain!')">🔔</div>
   </div>
-
-  <!-- Tier Badge -->
-  <div style="padding: 0 20px 10px;">
+  <div class="greeting-wrap">
+    <div class="greeting-day" id="day-greeting">Welcome back!</div>
+    <div class="greeting-name" id="user-name">Biryani Lover</div>
+  </div>
+  <div class="tier-badge-row">
     <div class="tier-badge">🥈 <span id="tier-label">Silver Member</span></div>
   </div>
-
-  <!-- Gold Wallet Card -->
   <div class="gold-card">
     <div class="card-label">Gold Card · Wallet Balance</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--gold-light);margin:4px 0 2px;">Elite Wallet</div>
     <div class="balance-amount">₹<span id="balance">120</span></div>
-    <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 12px;">
-      ₹<span id="to-gold">80</span> aur kamao <b style="color:var(--gold);">FREE BIRYANI</b> ke liye!
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="tier-bar" style="width: 60%;"></div>
-    </div>
-    <div class="wallet-actions">
-      <button class="card-btn" onclick="addMoney()">+ Add Money</button>
-      <button class="card-btn" onclick="location.href='offers.html'">View History</button>
+    <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:12px;">₹<span id="to-gold">80</span> aur kamao → <b style="color:var(--gold);">FREE BIRYANI</b> milega!</div>
+    <div class="progress-track"><div class="progress-fill" id="tier-bar" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:6px;"><span>₹0</span><span id="prog-lbl">₹120 / ₹200</span><span>₹200 Gold</span></div>
+    <div class="card-actions" style="margin-top:14px;">
+      <button class="card-btn" onclick="showToast('💰 Add Money gateway jald aayega!')">+ Add Money</button>
+      <button class="card-btn" onclick="location.href='profile.html'">📋 History</button>
     </div>
   </div>
-
-  <!-- AI Agent Box -->
   <div class="ai-box">
-    <div class="ai-label">🤖 Groq AI — Chef's Recommendation</div>
-    <div class="ai-text" id="ai-rec">Loading recommendation...</div>
+    <div class="ai-label"><span class="ai-dot"></span>🤖 Groq AI — Chef's Recommendation</div>
+    <div class="ai-text" id="ai-rec">Loading...</div>
+    <button class="ai-refresh" onclick="refreshAI()">✨ Nayi tip lo</button>
   </div>
-
-  <!-- Mission Strip -->
   <div class="mission-strip">
     <div class="mission-text">
-      <h4>Instant ₹10 Kamaein! 🎁</h4>
-      <p>Review do aur wallet mein paao</p>
+      <h4>⚡ ₹10 Instantly Kamao!</h4>
+      <p>IG Story share karo → ₹10 wallet mein!</p>
     </div>
-    <button class="mission-btn" onclick="location.href='review.html'">REVIEW NOW</button>
+    <button class="mission-btn" onclick="openStoryModal()">📸 SHARE</button>
   </div>
-
-  <!-- Quick Actions -->
-  <div class="section-title" style="margin-bottom: 12px;">Quick Actions</div>
+  <div class="section-title">🔥 Hot Offers</div>
+  <div class="offers-scroll">
+    <div class="offer-pill">🚚 <span>FREE</span> delivery aaj!</div>
+    <div class="offer-pill">🍗 <span>10% OFF</span> Biryani</div>
+    <div class="offer-pill">🎂 Birthday <span>Gift</span></div>
+    <div class="offer-pill">⭐ Review = <span>₹5</span></div>
+    <div class="offer-pill">👫 Refer = <span>₹50</span></div>
+  </div>
+  <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;padding-right:20px;"><span>🍛 Aaj Ka Menu</span><a href="menu.html" style="font-size:12px;color:var(--gold);font-weight:600;text-decoration:none;">Pura menu →</a></div>
+  <div class="menu-preview-scroll">
+    <div class="mp-card"><div class="mp-img">🍛<span class="mp-badge" style="background:rgba(220,60,60,0.85);color:white;">🔥 BEST</span></div><div class="mp-body"><div class="mp-name">Chicken Dum Biryani</div><div class="mp-footer"><div class="mp-price">₹169</div><button class="mp-add" onclick="quickOrder()">+</button></div></div></div>
+    <div class="mp-card"><div class="mp-img">🥘<span class="mp-badge" style="background:rgba(197,160,89,0.9);color:#071f0a;">CHEF'S</span></div><div class="mp-body"><div class="mp-name">Tikka 21 Spices</div><div class="mp-footer"><div class="mp-price">₹199</div><button class="mp-add" onclick="quickOrder()">+</button></div></div></div>
+    <div class="mp-card"><div class="mp-img">🍗</div><div class="mp-body"><div class="mp-name">Crispy Lollipop</div><div class="mp-footer"><div class="mp-price">₹189</div><button class="mp-add" onclick="quickOrder()">+</button></div></div></div>
+    <div class="mp-card"><div class="mp-img">🎯<span class="mp-badge" style="background:rgba(255,200,0,0.9);color:#071f0a;">VALUE</span></div><div class="mp-body"><div class="mp-name">All in One Combo</div><div class="mp-footer"><div class="mp-price">₹649</div><button class="mp-add" onclick="quickOrder()">+</button></div></div></div>
+    <div class="mp-card"><div class="mp-img">🍿<span class="mp-badge" style="background:rgba(46,213,115,0.9);color:#071f0a;">NEW</span></div><div class="mp-body"><div class="mp-name">Popcorn Biryani</div><div class="mp-footer"><div class="mp-price">₹249</div><button class="mp-add" onclick="quickOrder()">+</button></div></div></div>
+  </div>
+  <div class="section-title">⚡ Quick Actions</div>
   <div class="quick-actions">
-    <a href="menu.html" class="quick-card">
-      <div class="quick-icon">📜</div>
-      <div class="quick-label">Full Menu</div>
-      <div class="quick-sub">Order karein</div>
-    </a>
-    <a href="offers.html" class="quick-card">
-      <div class="quick-icon">🎁</div>
-      <div class="quick-label">Offers & Rewards</div>
-      <div class="quick-sub">Points redeem karein</div>
-    </a>
-    <a href="review.html" class="quick-card">
-      <div class="quick-icon">⭐</div>
-      <div class="quick-label">Rate & Review</div>
-      <div class="quick-sub">₹10 instant reward</div>
-    </a>
-    <a href="profile.html" class="quick-card">
-      <div class="quick-icon">👤</div>
-      <div class="quick-label">My Profile</div>
-      <div class="quick-sub">Settings & history</div>
-    </a>
+    <a href="menu.html" class="quick-card"><div class="quick-icon">🍛</div><div class="quick-label">Order Biryani</div><div class="quick-sub">Full menu dekho</div></a>
+    <a href="review.html" class="quick-card"><div class="quick-icon">⭐</div><div class="quick-label">Rate & Review</div><div class="quick-sub">₹10 instant reward</div></a>
+    <a href="offers.html" class="quick-card"><div class="quick-icon">🎁</div><div class="quick-label">Today's Offers</div><div class="quick-sub">Exclusive deals</div></a>
+    <a href="profile.html" class="quick-card"><div class="quick-icon">👤</div><div class="quick-label">My Profile</div><div class="quick-sub">History & settings</div></a>
   </div>
-
-  <!-- Recent Orders -->
-  <div class="section-title">Recent Orders</div>
-  <div class="order-history">
-    <div class="order-item">
-      <div class="order-icon">🍛</div>
-      <div class="order-info">
-        <div class="order-name">Chicken Dum Biryani (Full)</div>
-        <div class="order-date">2 din pehle • Delivered</div>
-      </div>
-      <div class="order-price">₹219</div>
-    </div>
-    <div class="order-item">
-      <div class="order-icon">🍗</div>
-      <div class="order-info">
-        <div class="order-name">Crispy Lollipop × 4</div>
-        <div class="order-date">5 din pehle • Delivered</div>
-      </div>
-      <div class="order-price">₹189</div>
-    </div>
-    <div class="order-item">
-      <div class="order-icon">🎉</div>
-      <div class="order-info">
-        <div class="order-name">All in One Combo</div>
-        <div class="order-date">10 din pehle • Delivered</div>
-      </div>
-      <div class="order-price">₹649</div>
-    </div>
+  <div class="rewards-card">
+    <div class="rewards-title">🏆 Rewards Progress</div>
+    <div class="reward-milestone"><div class="milestone-icon">⭐</div><div class="milestone-info"><div class="milestone-label">Review Rewards</div><div class="milestone-sub">2/5 reviews — ₹10 each</div><div class="milestone-track"><div class="milestone-fill" style="width:40%"></div></div></div><div class="milestone-count">₹20</div></div>
+    <div class="reward-milestone"><div class="milestone-icon">📤</div><div class="milestone-info"><div class="milestone-label">Story Shares</div><div class="milestone-sub">1/3 shares — ₹10 each</div><div class="milestone-track"><div class="milestone-fill" style="width:33%"></div></div></div><div class="milestone-count">₹10</div></div>
+    <div class="reward-milestone"><div class="milestone-icon">👫</div><div class="milestone-info"><div class="milestone-label">Referral Bonus</div><div class="milestone-sub">0/3 referrals — ₹50 each</div><div class="milestone-track"><div class="milestone-fill" style="width:5%"></div></div></div><div class="milestone-count">₹0</div></div>
   </div>
-
+  <div class="section-title">📦 Recent Orders</div>
+  <div style="padding:0 20px" id="orders-list"></div>
   <div class="spacer-20"></div>
-
-  <!-- Bottom Nav -->
   <nav class="bottom-nav">
-    <a class="nav-item active" href="dashboard.html">
-      <span class="nav-icon">🏠</span><span>Home</span>
-    </a>
-    <a class="nav-item" href="menu.html">
-      <span class="nav-icon">📜</span><span>Menu</span>
-    </a>
-    <a class="nav-item" href="offers.html">
-      <span class="nav-icon">🎁</span><span>Offers</span>
-    </a>
-    <a class="nav-item" href="profile.html">
-      <span class="nav-icon">👤</span><span>Profile</span>
-    </a>
+    <a class="nav-item active" href="dashboard.html"><div class="nav-icon">🏠</div>Home</a>
+    <a class="nav-item" href="menu.html"><div class="nav-icon">🍽️</div>Menu</a>
+    <a class="nav-item" href="offers.html"><div class="nav-icon">🎁</div>Offers</a>
+    <a class="nav-item" href="profile.html"><div class="nav-icon">👤</div>Profile</a>
   </nav>
 </div>
-
+<div class="modal-overlay" id="storyModal" onclick="closeStoryModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📸 Apni IG Story Banao!</div>
+    <div class="modal-desc">Download karo, Instagram pe share karo — ₹10 wallet mein!</div>
+    <canvas id="story-canvas" width="540" height="960"></canvas>
+    <button class="modal-dl-btn" onclick="downloadStory()">⬇️ Download & Share Karo</button>
+    <button class="modal-close-btn" onclick="closeStoryModal()">Baad mein karta hoon</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
-
 <script>
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
+const user = JSON.parse(localStorage.getItem('bb_user') || 'null');
+if (!user) location.href = 'index.html';
+document.getElementById('user-name').textContent = user.name || 'Biryani Lover';
+const bal = user.balance || 120;
+document.getElementById('balance').textContent = bal;
+document.getElementById('tier-label').textContent = (user.tier || 'Silver') + ' Member';
+document.getElementById('to-gold').textContent = Math.max(0, 200 - bal);
+document.getElementById('prog-lbl').textContent = '₹' + bal + ' / ₹200';
+setTimeout(() => document.getElementById('tier-bar').style.width = Math.min((bal/200)*100,100) + '%', 200);
 
-// Load user data
-const user = JSON.parse(localStorage.getItem('bb_user') || '{"name":"Biryani Lover","balance":120,"tier":"Silver","points":40}');
-document.getElementById('user-name').textContent = user.name;
-document.getElementById('balance').textContent = user.balance;
-document.getElementById('tier-label').textContent = user.tier + ' Member';
-document.getElementById('to-gold').textContent = 200 - user.balance;
-const barPct = Math.min((user.balance / 200) * 100, 100);
-document.getElementById('tier-bar').style.width = barPct + '%';
-
-// Greeting by time
-const hour = new Date().getHours();
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const dayName = days[new Date().getDay()];
-const hindiDay = { Friday: 'Happy Friday', Saturday: 'Happy Saturday', Sunday: 'Happy Sunday' };
-document.getElementById('day-greeting').textContent = (hindiDay[dayName] || 'Welcome Back') + '! 🌙';
+const hindiG = { Friday:'Happy Friday! Jumma mubarak 🌙', Saturday:'Happy Saturday! Weekend enjoy karo 🎉', Sunday:'Happy Sunday! Ghar baith ke biryani mangao 😎' };
+const h = new Date().getHours(), dn = days[new Date().getDay()];
+document.getElementById('day-greeting').textContent = hindiG[dn] || (h<12?'Good Morning 🌅':h<17?'Good Afternoon ☀️':'Good Evening 🌙');
 
-// AI recommendation
-const recs = [
-  'Aaj Friday hai! Hamari <b>21 Spices Dum Biryani</b> perfect weekend choice hai. Sirf ₹249 mein ek royal experience le lo! 🍛',
-  'Aapke pichle order ke hisab se <b>Chicken Tikka 21 Spices</b> aapko zaroor pasand aayega. Chef\'s special sirf ₹249!',
-  'Aaj ek khaas din: <b>Crispy Lollipop + Biryani Combo</b> try karo — ₹399 mein ₹50 save karo! Bohot popular hai aaj. 🎉',
-  '<b>Chicken Popcorn Biryani</b> — naya item hai! Unique twist on classic biryani. Aapke liye perfect lag raha hai, sirf ₹249. 🌟'
+const aiRecs = [
+  'Aaj <em>Friday</em> hai! <em>Chicken Tikka 21 Spices</em> Jumme ke liye perfect — sirf <em>₹199</em> mein 21 masalon ka jaadu! 🍛',
+  'Aapke hisab se <em>All in One Combo ₹649</em> best value hai aaj. Family ke liye zaroor try karo! 🎯',
+  '<em>Naya item!</em> Chicken Popcorn Biryani — unique crispy twist. Sirf <em>₹249</em> mein! 🍿',
+  '<em>Silver se Gold</em> sirf <em>₹' + Math.max(0,200-bal) + '</em> dur! Aaj order karo aur Gold unlock karo! 👑',
+  '<em>Happy Hours</em> alert! 2PM–5PM ke beech order karo → <em>15% extra off</em> milega! ⏰',
 ];
-document.getElementById('ai-rec').innerHTML = recs[new Date().getDay() % recs.length];
-
-function addMoney() {
-  showToast('Add Money feature coming soon! 💳');
+let aiIdx = new Date().getDay() % aiRecs.length;
+document.getElementById('ai-rec').innerHTML = aiRecs[aiIdx];
+function refreshAI() {
+  aiIdx = (aiIdx+1) % aiRecs.length;
+  const el = document.getElementById('ai-rec');
+  el.style.opacity = '0'; setTimeout(() => { el.innerHTML = aiRecs[aiIdx]; el.style.opacity = '1'; }, 180);
 }
+
+function quickOrder() { showToast('🍛 Menu pe ja rahe ho — cart mein add karo!'); setTimeout(() => location.href='menu.html', 600); }
+
+function renderOrders() {
+  const orders = JSON.parse(localStorage.getItem('bb_orders') || '[]');
+  const el = document.getElementById('orders-list');
+  if (!orders.length) {
+    el.innerHTML = '<div style="background:var(--dark-card);border:1px dashed #2a3a2a;border-radius:14px;padding:24px;text-align:center;margin-bottom:12px;"><div style="font-size:38px;margin-bottom:8px">🍛</div><div style="font-size:13px;color:var(--text-muted)">Abhi tak koi order nahi!<br><a href="menu.html" style="color:var(--gold);font-weight:700;text-decoration:none;">Pehla order karo →</a></div></div>';
+    return;
+  }
+  el.innerHTML = orders.slice(0,4).map(o=>`<div class="order-item"><div class="order-icon">🍛</div><div class="order-info"><div class="order-name">${o.items.map(i=>i.name).join(', ')}</div><div class="order-date">${o.date} · ${o.id} · Delivered ✅</div></div><div class="order-price">₹${o.total}</div></div>`).join('');
+}
+renderOrders();
+
+function openStoryModal() { document.getElementById('storyModal').classList.add('show'); setTimeout(drawCanvas,200); }
+function closeStoryModal(e) { if(!e||e.target===document.getElementById('storyModal')) document.getElementById('storyModal').classList.remove('show'); }
+
+function drawCanvas() {
+  const cv = document.getElementById('story-canvas'), ctx = cv.getContext('2d');
+  const W=540,H=960;
+  const bg = ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#051408'); bg.addColorStop(0.4,'#0a2910'); bg.addColorStop(1,'#020d04');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  ctx.save(); ctx.globalAlpha=0.06; ctx.strokeStyle='#c5a059'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(W*.8,H*.12,200,0,Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(W*.8,H*.12,140,0,Math.PI*2); ctx.stroke(); ctx.restore();
+  const tg=ctx.createLinearGradient(0,0,W,0);
+  tg.addColorStop(0,'transparent'); tg.addColorStop(.5,'#c5a059'); tg.addColorStop(1,'transparent');
+  ctx.fillStyle=tg; ctx.fillRect(0,0,W,3);
+  ctx.textAlign='center';
+  ctx.font='bold 50px Georgia,serif';
+  const grd=ctx.createLinearGradient(W/2-150,0,W/2+150,0);
+  grd.addColorStop(0,'#f0d080'); grd.addColorStop(.5,'#c5a059'); grd.addColorStop(1,'#8a6a30');
+  ctx.fillStyle=grd; ctx.fillText('The Biryani Box',W/2,125);
+  ctx.font='500 20px Poppins,sans-serif'; ctx.fillStyle='rgba(245,234,216,0.5)';
+  ctx.fillText('Cloud Kitchen · Bhopal 🍛',W/2,162);
+  ctx.beginPath(); ctx.moveTo(80,190); ctx.lineTo(W-80,190); ctx.strokeStyle=tg; ctx.lineWidth=1; ctx.stroke();
+  ctx.font='170px serif'; ctx.fillText('🍛',W/2,400);
+  ctx.font='bold 50px Georgia,serif'; ctx.fillStyle='#f5ead8'; ctx.fillText('Bhopal Ki',W/2,476);
+  ctx.fillStyle='#c5a059'; ctx.fillText('Best Biryani! ✨',W/2,542);
+  ctx.save(); ctx.globalAlpha=0.9;
+  rr(ctx,55,600,W-110,168,20); ctx.fillStyle='rgba(12,40,16,0.95)'; ctx.fill();
+  ctx.strokeStyle='rgba(197,160,89,0.4)'; ctx.lineWidth=1; ctx.stroke(); ctx.restore();
+  ctx.font='500 18px Poppins,sans-serif'; ctx.fillStyle='rgba(245,234,216,0.75)';
+  ctx.fillText('"Dum Biryani bilkul waisi jaise Nani ke',W/2,660);
+  ctx.fillText('haath ki hoti thi! 100/10 ⭐⭐⭐⭐⭐"',W/2,700);
+  ctx.font='500 16px Poppins,sans-serif'; ctx.fillStyle='rgba(197,160,89,0.75)';
+  ctx.fillText('— '+(user.name||'Elite Member')+' · Verified Customer',W/2,742);
+  const cta=ctx.createLinearGradient(80,830,W-80,900);
+  cta.addColorStop(0,'#8a6a30'); cta.addColorStop(.5,'#c5a059'); cta.addColorStop(1,'#8a6a30');
+  rr(ctx,80,832,W-160,70,35); ctx.fillStyle=cta; ctx.fill();
+  ctx.font='bold 22px Poppins,sans-serif'; ctx.fillStyle='#020d04';
+  ctx.fillText('ORDER NOW · thebiryanibox.in',W/2,876);
+  ctx.beginPath(); ctx.moveTo(80,H-40); ctx.lineTo(W-80,H-40); ctx.strokeStyle=tg; ctx.lineWidth=1; ctx.stroke();
+  ctx.font='500 15px Poppins,sans-serif'; ctx.fillStyle='rgba(197,160,89,0.45)';
+  ctx.fillText('@thebiryanibox.bhopal',W/2,H-14);
+}
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+
+function downloadStory() {
+  const a=document.createElement('a'); a.download='biryanibox-ig-story.png';
+  a.href=document.getElementById('story-canvas').toDataURL('image/png'); a.click();
+  showToast('🎉 Story download ho gayi! ₹10 jald aayega!');
+  if(!user.storyShared){user.storyShared=true;user.balance=(user.balance||120)+10;localStorage.setItem('bb_user',JSON.stringify(user));}
+  closeStoryModal();
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 </script>
 </body>
 </html>
